@@ -6,8 +6,10 @@ admin.autodiscover()
 from wq.db import rest
 rest.autodiscover()
 
+from geodata.views import view_image
+
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^viewimage/(?P<attachment_id>[0-9]+)', view_image),
     url(r'^', include(rest.router.urls))
 )

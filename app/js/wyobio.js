@@ -1,9 +1,9 @@
 requirejs.config({
     'baseUrl': '/js/lib',
     'paths': {
-        'species': '../species',
+        'wyobio': '../wyobio',
         'data': '../data/'
     }
 });
 
-requirejs(['species/main']);
+requirejs(['wyobio/main']);

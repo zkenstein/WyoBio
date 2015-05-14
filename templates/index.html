@@ -1,28 +1,21 @@
 <!DOCTYPE html>
-<html><!-- manifest="species.appcache" -->
+<html><!-- manifest="wyobio.appcache" -->
   <head>
-    <title>Species Tracker</title>
+    <title>WyoBio</title>
     {{>head}}
   </head>
   <body>
     <div data-role="page" class="ui-page">
       <div data-role="header">
-        <h1>Species Tracker</h1>
+        <h1>WyoBio</h1>
       </div>
       <div data-role="content">
         <ul data-role="listview">
           <li><a href="/species">About Species</a></li>
-          <li><a href="/reports">See Reports</a></li>
-          <li><a href="/reports/new">Share Report</a></li>
+          <li><a href="/points">See Reports</a></li>
+          <li><a href="/points/new">Share Report</a></li>
         </ul>
         <p>Version {{version}}</p>
-        <p style="text-align:center"><a href="https://github.com/wq/citizen-science-app">Source Code</a></p>
-        <p style="text-align:center;color:#999">
-          Powered By
-	  <a href="https://wq.io">
-            <img src="/images/wq.png" style="width:32px;height:32px;vertical-align:middle;"i>
-          </a>
-	</p>
       </div>
     </div>
   </body>

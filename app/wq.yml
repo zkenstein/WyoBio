@@ -4,12 +4,13 @@ optimize:
     baseUrl: js/lib
     dir: ../htdocs-build
     skipDirOptimize: true
+    optimize: "none"
     removeCombined: true
     modules:
          -
-            name: "species"
+            name: "wyobio"
     paths:
-        species: "../species"
+        wyobio: "../wyobio"
         data: ../data
 
 # Generate AMD-wrapped JSON fixtures
@@ -25,9 +26,9 @@ collectjson:
         jsonp: define
 
 # Compile jQuery Mobile themes from SCSS
-scss:
-    indir: scss
-    outdir: css
+#scss:
+#    indir: scss
+#    outdir: css
 
 # Update version.txt & JS module
 setversion:
@@ -36,8 +37,8 @@ setversion:
 
 # Generate Application Cache manifest
 appcache:
-    name: "species.appcache"
-    css: "css/species.css"
+    name: "wyobio.appcache"
+    css: "css/wyobio.css"
     css-ignore: "css/lib/images/icons-png/.*"
     cache:
          - js/lib/require.js

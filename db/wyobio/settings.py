@@ -1,5 +1,5 @@
 """
-Django settings for species project.
+Django settings for wyobio project.
 Based on the Django 1.6 template, with wq-specific modifications noted as such
 
 For more information on this file, see
@@ -20,16 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # wq: SECRET_KEY, DEBUG and TEMPLATE_DEBUG are defined in local_settings.py
 
-ALLOWED_HOSTS = ["species"]
+ALLOWED_HOSTS = ["wyobio"]
 
 
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'social.apps.django_app.default',
-
     'django.contrib.contenttypes',
+    'django.contrib.auth',
+
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -42,7 +41,7 @@ INSTALLED_APPS = (
     'wq.db.rest',
     'wq.db.rest.auth',
 
-    'reports',
+    'geodata',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,9 +76,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-ROOT_URLCONF = 'species.urls'
+ROOT_URLCONF = 'wyobio.urls'
 
-WSGI_APPLICATION = 'species.wsgi.application'
+WSGI_APPLICATION = 'wyobio.wsgi.application'
 
 
 # Database
