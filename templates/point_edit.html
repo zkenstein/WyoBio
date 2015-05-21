@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Submit Report</title>
+    <title>Submit Observation</title>
     {{>head}}
   </head>
   <body>
     <div data-role="page" class="ui-page">
       <div data-role="header">
         {{>home}}
-        <h1>Submit Report</h1>
+        <h1>Submit Observation</h1>
       </div>
       <div class="ui-content" role="main">
-        <form action="/reports/" data-ajax="false" method="post">
+        <form action="/points/" data-ajax="false" method="post">
           {{>csrf}}
         <ul data-role="listview">
+		  <!--
           <li data-role="fieldcontain">
             <label for="species">Species</label>
             <select id="species" name="species_id" required>
@@ -23,45 +24,60 @@
             {{/species_list}}
             </select>
           </li>
+		  
           <li data-role="fieldcontain">
             <label for="image">Photo</label>
             <input type="file" name="photo" id="image">
           </li>
+		  
           <li data-role="fieldcontain">
             <label for="date">Date</label>
             <input type="date" name="date" id="date">
           </li>
+		  -->
+		  <li data-role="fieldcontain">
+		    <label for='weather_id'>Weather Conditions</label>
+			<select name="weather_id" id="weather_id">
+			  <option value="">Select one...</option>
+			{{#weather_list}}
+			  <option value="{{id}}">{{label}}</option>
+			{{/weather_list}}
+			</select>
+		  </li>
+
           <li data-role="fieldcontain">
-            <fieldset>
+            <fieldset data-role="controlgroup" data-type="horizontal">
               <legend>Location Mode</legend>
-              <input type='radio' value='gps' id='loc-gps' name='mode'>
-              <label for='loc-gps'>GPS</label>
+              <input type='radio' value='gps' id='loc-gps' name='mode' checked>
+              <label for='loc-gps'>Current</label>
               <input type='radio' value='interactive' id='loc-interactive' name='mode'>
-              <label for='loc-interactive'>Interactive</label>
+              <label for='loc-interactive'>Use Map</label>
               <input type='radio' value='manual' id='loc-manual' name='mode'>
-              <label for='loc-manual'>Manual</label>
+              <label for='loc-manual'>Enter Coords</label>
             </fieldset>
           </li>
-          <li data-role="fieldcontain">
-            <div id="report-new-map" style="height:300px;"></div>
-          </li>
-          <li data-role="fieldcontain">
+          <li data-role="fieldcontain" class='edit-loc'>
             <label for="longitude">Longitude</label>
             <input id="longitude" name="longitude" type="tel">
           </li>
-          <li data-role="fieldcontain">
+          <li data-role="fieldcontain" class='edit-loc'>
             <label for="latitude">Latitude</label>
             <input id="latitude" name="latitude" type="tel">
           </li>
-          <li data-role="fieldcontain">
+          <li data-role="fieldcontain" class='edit-loc'>
             <label for="accuracy">Accuracy</label>
             <input id="accuracy" name="accuracy" type="tel">
           </li>
           <li data-role="fieldcontain">
+            <div id="point-new-map" style="height:300px;"></div>
+          </li>
+		  <!--
+          <li data-role="fieldcontain">
             <label for="notes">Notes</label>
             <textarea name="notes" id="notes"></textarea>
           </li>
-          <li><p class="error report-errors"></p></li>
+		  -->
+          <li><p class="error point-errors"></p></li>
           <li>
             <div class="ui-grid-a">
               <div class="ui-block-a">

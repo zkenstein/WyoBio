@@ -1,21 +1,33 @@
 from django.contrib.gis.db import models
-
+from django.db.models import Max
 
 class PointField(models.PointField):
     def select_format(self, compiler, sql, params):
         return "%s.STAsText()" % sql, params
+    
+    def get_placeholder(self, value, compiler, connection):
+        return "geometry::STPointFromText(%s, 3857)"
 
+    def get_db_prep_save(self, value, connection):
+        return value.wkt
 
 class Point(models.Model):
     id = models.IntegerField(db_column='pntID', primary_key=True)
+    objectid = models.IntegerField(db_column='OBJECTID')
     userid = models.CharField(db_column='userID', max_length=50, blank=True, null=True)
-    weatherconditions = models.CharField(db_column='weatherConditions', max_length=250, blank=True, null=True)
+    weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
     habdesc = models.CharField(db_column='habDesc', max_length=100, blank=True, null=True)
     coordcolmethod = models.CharField(db_column='coordColMethod', max_length=50, blank=True, null=True)
     vetted = models.SmallIntegerField(blank=True, null=True)
     geometry = PointField(
         db_column='SHAPE', blank=True, null=True, srid=3857
     )
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = Point.objects.aggregate(Max('id'))['id__max'] + 1
+            self.objectid = Point.objects.aggregate(Max('objectid'))['objectid__max'] + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.habdesc
@@ -71,3 +83,35 @@ class Attachment(models.Model):
     class Meta:
         managed = False
         db_table = 'POINTSOBS__ATTACH_1'
+
+class Habitat(models.Model):
+#    objectid = models.IntegerField(db_column='OBJECTID')  # Field name made lowercase.
+ #   id = models.IntegerField(db_column='ID', blank=True, null=True)  # Field name made lowercase.
+    desc_field = models.TextField(db_column='DESC_', blank=True, null=True)  # Field name made lowercase. Field renamed because it ended with '_'.
+
+    class Meta:
+        managed = False
+        db_table = 'POINTSOBS_HABITAT'
+
+
+class Phenology(models.Model):
+  #  objectid = models.IntegerField(db_column='OBJECTID')  # Field name made lowercase.
+   # id = models.IntegerField(db_column='ID', blank=True, null=True)  # Field name made lowercase.
+    desc_field = models.TextField(db_column='DESC_', blank=True, null=True)  # Field name made lowercase. Field renamed because it ended with '_'.
+
+    class Meta:
+        managed = False
+        db_table = 'POINTSOBS_PHENOLOGY'
+
+
+class Weather(models.Model):
+    # objectid = models.IntegerField(db_column='OBJECTID')  # Field name made lowercase.
+    # id = models.IntegerField(db_column='ID', blank=True, null=True)  # Field name made lowercase.
+    id = models.TextField(db_column='DESC_', primary_key=True)  # Field name made lowercase. Field renamed because it ended with '_'.
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        managed = False
+        db_table = 'POINTSOBS_WEATHER'

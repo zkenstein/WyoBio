@@ -20,14 +20,19 @@ class NestedObservationSerializer(ModelSerializer):
         fields = ['id']
 
 class PointSerializer(ModelSerializer):
-    observations = NestedObservationSerializer(many=True)
+    id = serializers.ReadOnlyField()
+   
+    # observations = NestedObservationSerializer(many=True)
     geometry = serializers.SerializerMethodField()
 
     def get_geometry(self, instance):
         geom = instance.geometry
+        if not geom:
+            return null
         geom.transform(4326)
         import json
         return json.loads(geom.geojson)
-        
+       
     class Meta:
         model = Point
+        exclude = ['objectid']
