@@ -17,7 +17,9 @@ class ObservationSerializer(ModelSerializer):
     point = serializers.ReadOnlyField()
     attachments = AttachmentSerializer(many=True)
     def create(self, validated_data):
+        username = self.context['request'].user.username
         attachment_data = validated_data.pop('attachments')
+        validated_data['username'] = username
         instance = super().create(validated_data)
         for attachment in attachment_data:
             #file = attachment['data']

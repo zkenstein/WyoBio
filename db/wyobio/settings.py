@@ -72,8 +72,7 @@ from wq.db.default_settings import (
 
 # wq: Social auth (see http://psa.matiasaguirre.net/docs/backends/)
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOpenId',
-    'django.contrib.auth.backends.ModelBackend',
+    'wyobio.auth.Backend',
 )
 
 ROOT_URLCONF = 'wyobio.urls'
