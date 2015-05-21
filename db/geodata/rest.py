@@ -1,16 +1,16 @@
 from wq.db import rest
 from .models import Point, Observation, Weather
 from .serializers import PointSerializer, ObservationSerializer
-from .views import PointViewSet
+from .views import ObservationViewSet
 
 rest.router.register_model(
     Point,
     serializer=PointSerializer,
-    viewset=PointViewSet,
 )
 rest.router.register_model(
     Observation,
-    serializer=ObservationSerializer
+    serializer=ObservationSerializer,
+    viewset=ObservationViewSet,
 )
 
 rest.router.register_model(Weather)

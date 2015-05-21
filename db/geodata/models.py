@@ -15,8 +15,6 @@ class Point(models.Model):
     id = models.IntegerField(db_column='pntID', primary_key=True)
     objectid = models.IntegerField(db_column='OBJECTID')
     userid = models.CharField(db_column='userID', max_length=50, blank=True, null=True)
-    weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
-    habdesc = models.CharField(db_column='habDesc', max_length=100, blank=True, null=True)
     coordcolmethod = models.CharField(db_column='coordColMethod', max_length=50, blank=True, null=True)
     vetted = models.SmallIntegerField(blank=True, null=True)
     geometry = PointField(
@@ -30,7 +28,7 @@ class Point(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.habdesc
+        return "Point %s" % self.id
 
     class Meta:
         managed = False
@@ -42,6 +40,8 @@ class Observation(models.Model):
         Point, db_column='pntID', blank=True, null=True,
         related_name="observations"
     )
+    # weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
+    # habdesc = models.CharField(db_column='habDesc', max_length=100, blank=True, null=True)
     obsid = models.IntegerField(db_column='obsID', blank=True, null=True)
     sampdate = models.TextField(db_column='sampDate', blank=True, null=True)
     speciesid = models.CharField(db_column='speciesID', max_length=10, blank=True, null=True)
@@ -66,6 +66,13 @@ class Observation(models.Model):
     def __str__(self):
         return "%s on %s" % (self.commonname, self.sampdate)
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = Observation.objects.aggregate(Max('id'))['id__max'] + 1
+            maxid = Observation.objects.filter(point=self.point).aggregate(Max('obsid'))['obsid__max']
+            self.obsid = maxid + 1 if maxid else 1
+        super().save(*args, **kwargs)
+        
     class Meta:
         managed = False
         db_table = 'POINTSOBS'
@@ -74,11 +81,16 @@ class Observation(models.Model):
 
 class Attachment(models.Model):
     id = models.IntegerField(db_column='ATTACHMENTID', primary_key=True)
-    observation = models.ForeignKey(Observation, db_column='REL_OBJECTID', related_name='attachments')
-    content_type = models.CharField(db_column='CONTENT_TYPE', max_length=150)
-    att_name = models.CharField(db_column='ATT_NAME', max_length=250)
-    data_size = models.IntegerField(db_column='DATA_SIZE')
+    observation = models.ForeignKey(Observation, db_column='REL_OBJECTID', related_name='attachments', null=True, blank=True)
+    content_type = models.CharField(db_column='CONTENT_TYPE', max_length=150, null=True, blank=True)
+    att_name = models.CharField(db_column='ATT_NAME', max_length=250, null=True, blank=True)
+    data_size = models.IntegerField(db_column='DATA_SIZE', null=True, blank=True)
     data = models.BinaryField(db_column='DATA', blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = Observation.objects.aggregate(Max('id'))['id__max'] + 1
+        super().save(*args, **kwargs)
 
     class Meta:
         managed = False

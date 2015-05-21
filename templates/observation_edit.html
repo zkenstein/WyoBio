@@ -11,7 +11,7 @@
         <h1>Submit Observation</h1>
       </div>
       <div class="ui-content" role="main">
-        <form action="/points/" data-ajax="false" method="post">
+        <form action="/observations/" data-ajax="false" method="post">
           {{>csrf}}
         <ul data-role="listview">
 		  <!--
@@ -24,17 +24,16 @@
             {{/species_list}}
             </select>
           </li>
-		  
+		  -->
           <li data-role="fieldcontain">
             <label for="image">Photo</label>
-            <input type="file" name="photo" id="image">
+            <input type="file" multiple name="attachments[0][data]" id="image">
           </li>
-		  
+		  <!--
           <li data-role="fieldcontain">
             <label for="date">Date</label>
             <input type="date" name="date" id="date">
           </li>
-		  -->
 		  <li data-role="fieldcontain">
 		    <label for='weather_id'>Weather Conditions</label>
 			<select name="weather_id" id="weather_id">
@@ -44,6 +43,7 @@
 			{{/weather_list}}
 			</select>
 		  </li>
+		  -->
 
           <li data-role="fieldcontain">
             <fieldset data-role="controlgroup" data-type="horizontal">
@@ -69,15 +69,13 @@
             <input id="accuracy" name="accuracy" type="tel">
           </li>
           <li data-role="fieldcontain">
-            <div id="point-new-map" style="height:300px;"></div>
+            <div id="observation-new-map" style="height:300px;"></div>
           </li>
-		  <!--
           <li data-role="fieldcontain">
-            <label for="notes">Notes</label>
-            <textarea name="notes" id="notes"></textarea>
+            <label for="comments">Notes</label>
+            <textarea name="comments" id="comments"></textarea>
           </li>
-		  -->
-          <li><p class="error point-errors"></p></li>
+          <li><p class="error observation-errors"></p></li>
           <li>
             <div class="ui-grid-a">
               <div class="ui-block-a">
