@@ -26,9 +26,9 @@ collectjson:
         jsonp: define
 
 # Compile jQuery Mobile themes from SCSS
-#scss:
-#    indir: scss
-#    outdir: css
+scss:
+    indir: scss
+    outdir: css
 
 # Update version.txt & JS module
 setversion:
