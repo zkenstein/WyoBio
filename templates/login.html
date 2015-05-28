@@ -11,10 +11,11 @@
         <h1>Log In</h1>
       </div>
       <div class="ui-content" role="main">
-        <form action="/login/" data-ajax="false" method="post">
+        <form action="/login/" data-ajax="false" method="post"
+            data-wq-json="true" data-wq-background-sync="false">
           {{>csrf}}
         <ul data-role="listview">
-		  <li data-role="fieldcontain">
+           <li data-role="fieldcontain">
             <label for="username">Username</label>
             <input id="username" name="username">
           </li>

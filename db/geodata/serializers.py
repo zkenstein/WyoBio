@@ -12,11 +12,6 @@ class AttachmentSerializer(ModelSerializer):
 
 class ObservationSerializer(ModelSerializer):
     id = serializers.ReadOnlyField()
-
-    # FIXME: Why are these coming through as required?
-    obsid = serializers.ReadOnlyField()
-    point = serializers.ReadOnlyField()
-    
     attachments = AttachmentSerializer(many=True)
     
     def create(self, validated_data):
@@ -35,7 +30,7 @@ class ObservationSerializer(ModelSerializer):
             # (need another PointField hack to make the query work)
             pt = Point.objects.create(
                 geometry=geom,
-                userid=username
+                userid=request.user.id,
             )
             validated_data['point'] = pt
             
@@ -57,7 +52,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ['obsid', 'point']
+        exclude = ['obsid']
 
 class NestedObservationSerializer(ModelSerializer):
     class Meta:

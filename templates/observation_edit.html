@@ -9,12 +9,13 @@
       <div data-role="header">
         {{>home}}
         <h1>Submit Observation</h1>
+        <a href="/observations/new" data-icon="plus">Add</a>
       </div>
       <div class="ui-content" role="main">
         <form action="/observations/" data-ajax="false" method="post">
           {{>csrf}}
         <ul data-role="listview">
-		  <!--
+                  <!--
           <li data-role="fieldcontain">
             <label for="species">Species</label>
             <select id="species" name="species_id" required>
@@ -24,26 +25,26 @@
             {{/species_list}}
             </select>
           </li>
-		  -->
+                  -->
           <li data-role="fieldcontain">
             <label for="image">Photo</label>
             <input type="file" multiple name="attachments[0][data]" id="image">
           </li>
-		  <!--
+                  <!--
           <li data-role="fieldcontain">
             <label for="date">Date</label>
             <input type="date" name="date" id="date">
           </li>
-		  <li data-role="fieldcontain">
-		    <label for='weather_id'>Weather Conditions</label>
-			<select name="weather_id" id="weather_id">
-			  <option value="">Select one...</option>
-			{{#weather_list}}
-			  <option value="{{id}}">{{label}}</option>
-			{{/weather_list}}
-			</select>
-		  </li>
-		  -->
+          <li data-role="fieldcontain">
+            <label for='weather_id'>Weather Conditions</label>
+            <select name="weather_id" id="weather_id">
+              <option value="">Select one...</option>
+            {{#weather_list}}
+              <option value="{{id}}">{{label}}</option>
+            {{/weather_list}}
+            </select>
+          </li>
+                  -->
 
           <li data-role="fieldcontain">
             <fieldset data-role="controlgroup" data-type="horizontal">

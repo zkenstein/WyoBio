@@ -1,15 +1,26 @@
-define(['leaflet', 'wq/pages', 'wq/locate', 'wq/app', 'wq/map', './config', 'data/templates'],
-function(L, pages, locate, app, map ,config, templates) {
+define(['leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', './config'],
+function(L, router, locate, app, map, photos, config) {
 L.Icon.Default.imagePath= "/css/lib/images";
 
-localStorage.clear();
+config.presync = function() {
+    $('button.sync').html("Syncing...");
+};
+config.postsync = function(items) {
+    $('button.sync').html("Sync Now");
+    app.syncRefresh(items);
+};
 
-app.init(config, templates);
-map.init(config.map);
+app.init(config).then(function() {
+    map.init(config.map);
+    photos.init();
+    router.addRoute('observations/new', 's', _locatorMap);
+    app.jqmInit();
+    app.prefetchAll();
+})
 
-pages.addRoute('observations/new', 's', function(match, ui, params, hash, evt, $page) {
+function _locatorMap(match, ui, params, hash, evt, $page) {
 	// Create Leaflet map
-	var m = L.map('observation-new-map').setView(config.map.center, config.map.zoom);
+	var m = L.map('observation-new-map').fitBounds(config.map.bounds);
 	map.createBaseMaps().Street.addTo(m);
 	// Initialize basemaps & location ...
 
@@ -37,8 +48,7 @@ pages.addRoute('observations/new', 's', function(match, ui, params, hash, evt, $
 	}
 
 	var locator = locate.locator(m, fields, opts);
-});
-app.jqmInit();
+}
 
 });
 

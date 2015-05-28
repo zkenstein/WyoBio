@@ -12,8 +12,12 @@ class Backend(ModelBackend):
             'password': password,
         })
 
-        if response.text == "1":
-            user, is_new = User.objects.get_or_create(username=username)
+        uid = int(response.text)
+        if uid:
+            user, is_new = User.objects.get_or_create(
+                id=uid,
+                username=username
+            )
             return user
         else:
             return None
