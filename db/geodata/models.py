@@ -1,5 +1,16 @@
 from django.contrib.gis.db import models
 from django.db.models import Max
+from django.db import connections, transaction
+from django.conf import settings
+
+
+def get_next_id(table):
+    cursor = connections['arcgis'].cursor()
+    owner = settings.DB_OWNER
+    rowid = 0
+    owner, table, rowid = cursor.callproc("next_rowid", (owner, table, rowid))
+    return rowid
+
 
 class PointField(models.PointField):
     def select_format(self, compiler, sql, params):
@@ -11,21 +22,36 @@ class PointField(models.PointField):
     def get_db_prep_save(self, value, connection):
         return value.wkt
 
-class Point(models.Model):
-    id = models.IntegerField(db_column='pntID', primary_key=True)
-    objectid = models.IntegerField(db_column='OBJECTID')
+
+class IncrementingField(models.IntegerField):
+    def get_placeholder(self, value, compiler, connection):
+        return "(SELECT MAX({db_column}) + %s FROM {db_table})".format(
+            db_column=self.db_column,
+            db_table=self.model._meta.db_table
+        )
+
+    def get_db_prep_save(self, value, connection):
+        return 1
+
+
+class ArcGisModel(models.Model):
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = get_next_id(self._meta.db_table)
+        super().save(*args, **kwargs)
+    class Meta:
+        abstract = True
+
+
+class Point(ArcGisModel):
+    id = models.IntegerField(db_column='OBJECTID', primary_key=True)
+    pntid = IncrementingField(db_column='pntID')
     userid = models.CharField(db_column='userID', max_length=50, blank=True, null=True)
     coordcolmethod = models.CharField(db_column='coordColMethod', max_length=50, blank=True, null=True)
     vetted = models.SmallIntegerField(blank=True, null=True)
     geometry = PointField(
         db_column='SHAPE', blank=True, null=True, srid=3857
     )
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.id = Point.objects.aggregate(Max('id'))['id__max'] + 1
-            self.objectid = Point.objects.aggregate(Max('objectid'))['objectid__max'] + 1
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return "Point %s" % self.id
@@ -34,7 +60,8 @@ class Point(models.Model):
         managed = False
         db_table = 'POINTSWM84'
 
-class Observation(models.Model):
+
+class Observation(ArcGisModel):
     id = models.IntegerField(db_column='OBJECTID', primary_key=True)
     point = models.ForeignKey(
         Point, db_column='pntID', blank=True, null=True,
@@ -42,7 +69,7 @@ class Observation(models.Model):
     )
     # weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
     # habdesc = models.CharField(db_column='habDesc', max_length=100, blank=True, null=True)
-    obsid = models.IntegerField(db_column='obsID', blank=True, null=True)
+    obsid = IncrementingField(db_column='obsID', blank=True, null=True)
     sampdate = models.TextField(db_column='sampDate', blank=True, null=True)
     speciesid = models.CharField(db_column='speciesID', max_length=10, blank=True, null=True)
     type = models.IntegerField(blank=True, null=True)
@@ -66,35 +93,24 @@ class Observation(models.Model):
     def __str__(self):
         return "%s on %s" % (self.commonname, self.sampdate)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.id = Observation.objects.aggregate(Max('id'))['id__max'] + 1
-            maxid = Observation.objects.filter(point=self.point).aggregate(Max('obsid'))['obsid__max']
-            self.obsid = maxid + 1 if maxid else 1
-        super().save(*args, **kwargs)
-        
     class Meta:
         managed = False
         db_table = 'POINTSOBS'
         unique_together = (('point', 'obsid'),)
 
 
-class Attachment(models.Model):
+class Attachment(ArcGisModel):
     id = models.IntegerField(db_column='ATTACHMENTID', primary_key=True)
     observation = models.ForeignKey(Observation, db_column='REL_OBJECTID', related_name='attachments', null=True, blank=True)
     content_type = models.CharField(db_column='CONTENT_TYPE', max_length=150, null=True, blank=True)
     att_name = models.CharField(db_column='ATT_NAME', max_length=250, null=True, blank=True)
     data_size = models.IntegerField(db_column='DATA_SIZE', null=True, blank=True)
     data = models.BinaryField(db_column='DATA', blank=True, null=True)
-    
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.id = Observation.objects.aggregate(Max('id'))['id__max'] + 1
-        super().save(*args, **kwargs)
 
     class Meta:
         managed = False
         db_table = 'POINTSOBS__ATTACH_1'
+
 
 class Habitat(models.Model):
 #    objectid = models.IntegerField(db_column='OBJECTID')  # Field name made lowercase.
