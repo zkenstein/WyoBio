@@ -12,7 +12,11 @@
         <a href="/observations/new" data-icon="plus">Add</a>
       </div>
       <div class="ui-content" role="main">
-        <form action="/observations/" data-ajax="false" method="post">
+        <form action="/observations/" data-ajax="false" method="post"
+          {{#outbox_id}}
+            data-wq-outbox-id="{{outbox_id}}"
+            data-wq-outbox-preserve="latitude,longitude,attachments[0][data]"
+          {{/outbox_id}}>
           {{>csrf}}
         <ul data-role="listview">
                   <!--
@@ -28,13 +32,20 @@
                   -->
           <li data-role="fieldcontain">
             <label for="image">Photo</label>
+            {{#attachments[0][data].name}}
+            <input type="text" id="image" disabled
+                   value="{{attachments[0][data].name}} ({{attachments[0][data].type}}, {{attachments[0][data].body.size}} bytes)">
+            {{/attachments[0][data].name}}
+            {{^attachments[0][data].name}}
             <input type="file" multiple name="attachments[0][data]" id="image">
+            {{/attachments[0][data].name}}
+            <p class="error report-photo-errors"></p>
+          </li>
+          <li data-role="fieldcontain">
+            <label for="sampdate">Date</label>
+            <input type="datetime-local" name="sampdate" id="sampdate" value="{{sampdate}}">
           </li>
                   <!--
-          <li data-role="fieldcontain">
-            <label for="date">Date</label>
-            <input type="date" name="date" id="date">
-          </li>
           <li data-role="fieldcontain">
             <label for='weather_id'>Weather Conditions</label>
             <select name="weather_id" id="weather_id">
@@ -45,7 +56,7 @@
             </select>
           </li>
                   -->
-
+          {{^outbox_id}}{{^id}}
           <li data-role="fieldcontain">
             <fieldset data-role="controlgroup" data-type="horizontal">
               <legend>Location Mode</legend>
@@ -59,22 +70,24 @@
           </li>
           <li data-role="fieldcontain" class='edit-loc'>
             <label for="longitude">Longitude</label>
-            <input id="longitude" name="longitude" type="tel">
+            <input id="longitude" name="longitude" type="tel" value="{{longitude}}">
           </li>
           <li data-role="fieldcontain" class='edit-loc'>
             <label for="latitude">Latitude</label>
-            <input id="latitude" name="latitude" type="tel">
+            <input id="latitude" name="latitude" type="tel" value="{{latitude}}">
           </li>
           <li data-role="fieldcontain" class='edit-loc'>
             <label for="accuracy">Accuracy</label>
-            <input id="accuracy" name="accuracy" type="tel">
+            <input id="accuracy" name="accuracy" type="tel" value="{{accuracy}}">
           </li>
           <li data-role="fieldcontain">
             <div id="observation-new-map" style="height:300px;"></div>
           </li>
+          {{/id}}{{/outbox_id}}
+          <li class='view-loc'>{{>view_loc}}</li>
           <li data-role="fieldcontain">
-            <label for="comments">Notes</label>
-            <textarea name="comments" id="comments"></textarea>
+            <label for="comments">Comments</label>
+            <textarea name="comments" id="comments">{{comments}}</textarea>
           </li>
           <li><p class="error observation-errors"></p></li>
           <li>

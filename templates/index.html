@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><!-- manifest="wyobio.appcache" -->
+<html manifest="wyobio.appcache">
   <head>
     <title>WyoBio</title>
     {{>head}}
@@ -11,7 +11,8 @@
       </div>
       <div data-role="content">
         <ul data-role="listview">
-          <li><a href="/login">Log In</a></li>
+          <li class="logged-out"><a href="/login">Log In</a></li>
+          <li class="logged-in"><a href="/logout">Log Out</a></li>
           <li><a href="/observations/new">Share Observation</a></li>
           <li><a href="/observations">See Observations</a></li>
           <li><a href="/species">About Species</a></li>

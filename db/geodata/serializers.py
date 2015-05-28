@@ -12,11 +12,11 @@ class AttachmentSerializer(ModelSerializer):
 
 class ObservationSerializer(ModelSerializer):
     id = serializers.ReadOnlyField()
-    attachments = AttachmentSerializer(many=True)
+    attachments = AttachmentSerializer(many=True, required=False)
     
     def create(self, validated_data):
         request = self.context['request']
-        attachment_data = validated_data.pop('attachments')
+        attachment_data = validated_data.pop('attachments', [])
         
         # FIXME: In theory these should all be set through Fields
         username = request.user.username
@@ -75,4 +75,3 @@ class PointSerializer(ModelSerializer):
        
     class Meta:
         model = Point
-        exclude = ['objectid']

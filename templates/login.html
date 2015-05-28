@@ -11,6 +11,13 @@
         <h1>Log In</h1>
       </div>
       <div class="ui-content" role="main">
+        {{#is_authenticated}}
+        <p>Logged in as {{user.username}}</p>
+        <a data-role="button" href="/logout">
+          Log Out
+        </a>
+        {{/is_authenticated}}
+        {{^is_authenticated}}
         <form action="/login/" data-ajax="false" method="post"
             data-wq-json="true" data-wq-background-sync="false">
           {{>csrf}}
@@ -36,6 +43,7 @@
           </div>
         </ul>
         </form>
+        {{/is_authenticated}}
       </div>
     </div>
   </body>

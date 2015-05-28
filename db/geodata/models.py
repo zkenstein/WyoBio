@@ -70,7 +70,7 @@ class Observation(ArcGisModel):
     # weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
     # habdesc = models.CharField(db_column='habDesc', max_length=100, blank=True, null=True)
     obsid = IncrementingField(db_column='obsID', blank=True, null=True)
-    sampdate = models.TextField(db_column='sampDate', blank=True, null=True)
+    sampdate = models.DateTimeField(db_column='sampDate', blank=True, null=True)
     speciesid = models.CharField(db_column='speciesID', max_length=10, blank=True, null=True)
     type = models.IntegerField(blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)

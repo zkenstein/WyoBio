@@ -1,5 +1,5 @@
-define(['leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', './config'],
-function(L, router, locate, app, map, photos, config) {
+define(['jquery', 'leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', 'wq/template', './config'],
+function($, L, router, locate, app, map, photos, tmpl, config) {
 L.Icon.Default.imagePath= "/css/lib/images";
 
 config.presync = function() {
@@ -10,13 +10,38 @@ config.postsync = function(items) {
     app.syncRefresh(items);
 };
 
+$('body').on('login', function() {
+    app.prefetchAll();
+    _showLogin(true);
+});
+$('body').on('logout', function() {
+    app.prefetchAll();
+    _showLogin(false);
+});
+function _showLogin(loggedIn) {
+    if (loggedIn) {
+        $('.logged-in').show();
+        $('.logged-out').hide();
+    } else {
+        $('.logged-out').show();
+        $('.logged-in').hide();
+    }
+}
+
 app.init(config).then(function() {
+    if (!app.user) {
+        _showLogin();
+    }
     map.init(config.map);
     photos.init();
     router.addRoute('observations/new', 's', _locatorMap);
+    router.addRoute('', 's', function() {
+        _showLogin(app.user);
+    })
     app.jqmInit();
     app.prefetchAll();
-})
+});
+
 
 function _locatorMap(match, ui, params, hash, evt, $page) {
 	// Create Leaflet map
@@ -36,14 +61,22 @@ function _locatorMap(match, ui, params, hash, evt, $page) {
 	var opts = {
 		'onSetMode': function(mode) {
 			var $editLoc = $page.find('.edit-loc');
+			var $viewLoc = $page.find('.view-loc');
 			if (mode == 'manual') {
 				$editLoc.show();
+				$viewLoc.hide();
 			} else {
 				$editLoc.hide();
+				$viewLoc.show();
 			}
 		},
 		'onUpdate': function(location, accuracy) {
 			// TODO: Verify valid coordinates & accuracy
+            $page.find('.view-loc').html(tmpl.render("{{>view_loc}}", {
+                'latitude': location.lat,
+                'longitude': location.lng,
+                'accuracy': accuracy
+            }));
 		}
 	}
 

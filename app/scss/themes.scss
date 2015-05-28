@@ -3,11 +3,11 @@
 @import "wq/swatches";
 
 @include jquery-mobile-gray-theme(
-    $theme: a
+    $theme: b
 );
 
 @include jquery-mobile-black-theme(
-    $theme: b
+    $theme: a
 );
 
 $font: sans-serif;

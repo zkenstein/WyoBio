@@ -11,7 +11,8 @@ def point_filter(qs, request):
 
 def observation_filter(qs, request):
     points = point_filter(Point.objects.all(), request)
-    return qs.filter(point__in=points)
+    pntids = points.values_list('pntid', flat=True)
+    return qs.filter(point_id__in=pntids)
 
 rest.router.register_model(
     Point,
@@ -34,3 +35,4 @@ rest.router.register_model(
 rest.router.register_model(Weather)
 
 rest.router.add_page('index', {'url': ''})
+rest.router._extra_pages['login'][0]['postsave'] = 'index'

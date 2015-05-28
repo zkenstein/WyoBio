@@ -16,25 +16,40 @@
         {{#unsynced}}
           <li data-role="list-divider">Outbox</li>
           {{#unsyncedItems}}
-          <li {{#error}}data-icon="alert"{{/error}}><a href="{{router_info.base_url}}/outbox/{{id}}/edit">
+          <li {{#error}}data-icon="alert"{{/error}}><a href="{{router_info.base_url}}/outbox/{{id}}">
             {{#data}}
             {{#attachments[0][data]}}<img src="{{image_url}}">{{/attachments[0][data]}}
             {{^attachments[0][data]}}<img src="{{router_info.base_url}}/images/empty.png">{{/attachments[0][data]}}
-            {{species_id}} on {{date}}
+            <h3>{{species_id}} on {{date}}</h3>
+            <p>{{comments}}</p>
             {{/data}}
           </a></li>
           {{/unsyncedItems}}
           <li>
+            {{#is_authenticated}}
             <button class="sync" data-icon="refresh"
                 onclick="require('wq/app').sync(true)">
               {{#syncing}}Syncing...{{/syncing}}
               {{^syncing}}Sync Now{{/syncing}}
             </button>
+            {{/is_authenticated}}
+            {{^is_authenticated}}
+            <div>
+              <a href="/login" data-role="button" data-icon="refresh">Log In to Sync</a>
+            </div>
+            {{/is_authenticated}}
           </li>
           <li data-role="list-divider">Existing Items</li>
         {{/unsynced}}
         {{#list}}
-          <li><a href="/observations/{{id}}">{{label}}</a></li>
+          <li><a href="/observations/{{id}}">
+            <h3>{{label}}</h3>
+            <p>{{comments}}</p>
+          </a></li>
+        {{/list}}
+        {{^list}}
+          <li>No observations.</li>
+          <li data-icon="plus"><a href="/observations/new">Add Observation</a></li>
         {{/list}}
         </ul>
       </div>
