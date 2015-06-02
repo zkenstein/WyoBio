@@ -85,7 +85,7 @@ class Observation(ArcGisModel):
     
     # Other fields
     sampdate = models.DateTimeField(db_column='sampDate', blank=True, null=True)
-    type = models.IntegerField(blank=True, null=True)
+    type = models.CharField(max_length=50, blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)
     speciesdescription = models.CharField(db_column='speciesDescription', max_length=250, blank=True, null=True)
     numpeople = models.IntegerField(db_column='numPeople', blank=True, null=True)
@@ -118,6 +118,7 @@ class Observation(ArcGisModel):
         managed = False
         db_table = 'POINTSOBS'
         unique_together = (('point', 'obsid'),)
+        ordering = ["-sampdate"]
 
 
 class Attachment(ArcGisModel):
@@ -168,26 +169,21 @@ class Species(models.Model):
     elcode = models.CharField(
         db_column='ELCODE', max_length=10, unique=True
     )
+
+    parent_elcode = models.CharField(db_column='PARENT_ELCODE', max_length=255, blank=True, null=True)
     grp = models.CharField(db_column='GRP', max_length=255, blank=True, null=True)
     elem_type = models.CharField(db_column='ELEM_TYPE', max_length=255, blank=True, null=True)
     classif_level = models.CharField(db_column='CLASSIF_LEVEL', max_length=255, blank=True, null=True)
-    sname_search_field = models.CharField(db_column='SNAME_SEARCH_FIELD', max_length=255, blank=True, null=True)
-    wgfd_sname = models.CharField(db_column='WGFD_SNAME', max_length=255, blank=True, null=True)
+    range_map = models.CharField(db_column='RANGE_MAP', max_length=255, blank=True, null=True)
+    distributi = models.CharField(db_column='DISTRIBUTI', max_length=255, blank=True, null=True)
+    genus_species = models.CharField(db_column='GENUS_SPECIES', max_length=255, blank=True, null=True)
     sname = models.CharField(db_column='SNAME', max_length=255, blank=True, null=True)
+    wgfd_sname = models.CharField(db_column='WGFD_SNAME', max_length=255, blank=True, null=True)
+    wgfd_comname = models.CharField(db_column='WGFD_COMNAME', max_length=255, blank=True, null=True)
     gname = models.CharField(db_column='GNAME', max_length=255, blank=True, null=True)
-    s_syn_name = models.CharField(db_column='S_SYN_NAME', max_length=255, blank=True, null=True)
-    syn_2 = models.CharField(db_column='SYN_2', max_length=255, blank=True, null=True)
-    g_syn_name = models.CharField(db_column='G_SYN_NAME', max_length=255, blank=True, null=True)
     s_comname = models.CharField(db_column='S_COMNAME', max_length=255, blank=True, null=True)
     g_comname = models.CharField(db_column='G_COMNAME', max_length=255, blank=True, null=True)
-    other_scomname = models.CharField(db_column='OTHER_SCOMNAME', max_length=255, blank=True, null=True)
-    family = models.CharField(db_column='FAMILY', max_length=255, blank=True, null=True)
-    s_classification_com = models.CharField(db_column='S_CLASSIFICATION_COM', max_length=255, blank=True, null=True)
-    nat_dist_origin = models.CharField(db_column='NAT_DIST_ORIGIN', max_length=255, blank=True, null=True)
-    sp_abstract = models.CharField(db_column='SP_ABSTRACT', max_length=255, blank=True, null=True)
-    num_sfid = models.DecimalField(db_column='NUM_SFID', max_digits=38, decimal_places=8, blank=True, null=True)
-    num_obs = models.DecimalField(db_column='NUM_OBS', max_digits=38, decimal_places=8, blank=True, null=True)
-    heritage_rank = models.CharField(db_column='HERITAGE_RANK', max_length=255, blank=True, null=True)
+    num_obs = models.DecimalField(db_column='NUM_OBS', max_digits=15, decimal_places=6, blank=True, null=True)
     s_rank = models.CharField(db_column='S_RANK', max_length=255, blank=True, null=True)
     g_rank = models.CharField(db_column='G_RANK', max_length=255, blank=True, null=True)
     trackstat = models.CharField(db_column='TRACKSTAT', max_length=255, blank=True, null=True)
@@ -196,6 +192,7 @@ class Species(models.Model):
     usfs = models.CharField(db_column='USFS', max_length=255, blank=True, null=True)
     usfsr2 = models.CharField(db_column='USFSR2', max_length=255, blank=True, null=True)
     usfsr4 = models.CharField(db_column='USFSR4', max_length=255, blank=True, null=True)
+    wgfd = models.CharField(db_column='WGFD', max_length=255, blank=True, null=True)
     wgfd_nss = models.CharField(db_column='WGFD_NSS', max_length=255, blank=True, null=True)
     wgfd_tier = models.CharField(db_column='WGFD_TIER', max_length=255, blank=True, null=True)
     wy_contrib = models.CharField(db_column='WY_CONTRIB', max_length=255, blank=True, null=True)
@@ -203,7 +200,7 @@ class Species(models.Model):
     absracts = models.CharField(db_column='ABSRACTS', max_length=255, blank=True, null=True)
     rangemaps = models.CharField(db_column='RANGEMAPS', max_length=255, blank=True, null=True)
     distribmodels = models.CharField(db_column='DISTRIBMODELS', max_length=255, blank=True, null=True)
-    esid = models.DecimalField(db_column='ESID', max_digits=38, decimal_places=8, blank=True, null=True)
+    esid = models.DecimalField(db_column='ESID', max_digits=15, decimal_places=6, blank=True, null=True)
 
     def __str__(self):
         if self.s_comname:
@@ -213,6 +210,6 @@ class Species(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'LUSPECIES'
+        db_table = 'SPECIESLISTCOMPLETE'
         verbose_name_plural = "species"
         ordering = ("sname",)

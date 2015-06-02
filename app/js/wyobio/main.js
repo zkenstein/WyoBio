@@ -38,7 +38,7 @@ app.init(config).then(function() {
     map.init(config.map);
     photos.init();
     router.addRoute('observations/new', 's', _locatorMap);
-    router.addRoute('', 's', function() {
+    router.addRoute('', 'i', function() {
         _showLogin(app.user);
     })
     app.jqmInit();

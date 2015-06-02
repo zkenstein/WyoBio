@@ -31,6 +31,7 @@ rest.router.register_model(
     filter=observation_filter,
     per_page=100,
     max_local_pages=1,
+    reversed=True,
     # partial=True,
 )
 
@@ -45,4 +46,5 @@ rest.router.register_model(
 )
 
 rest.router.add_page('index', {'url': ''})
+rest.router.add_page('about', {'url': 'about'})
 rest.router._extra_pages['login'][0]['postsave'] = 'index'

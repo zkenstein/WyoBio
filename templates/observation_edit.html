@@ -11,7 +11,7 @@
         <h1>Add Observation</h1>
       </div>
       <div class="ui-content" role="main">
-        <form action="/observations/" data-ajax="false" method="post"
+        <form action="{{svc}}/observations/" data-ajax="false" method="post"
           {{#outbox_id}}
             data-wq-outbox-id="{{outbox_id}}"
             data-wq-outbox-preserve="latitude,longitude,photos"
@@ -52,7 +52,7 @@
                    value="{{name}} ({{type}}, {{body.size}} bytes)">
             {{/photos}}
             {{^photos}}
-            <input type="file" multiple name="photos" id="image">
+            <input type="file" accept="image/*" capture name="photos" id="image">
             {{/photos}}
             <p class="error observation-photos-errors"></p>
           </li>
@@ -135,7 +135,7 @@
           <li>
             <div class="ui-grid-a">
               <div class="ui-block-a">
-                <a href="/" data-role="button">Cancel</a>
+                <a href="{{rt}}/" data-role="button">Cancel</a>
               </div>
               <div class="ui-block-b">
                 <button type="save" data-theme="b">save</button>

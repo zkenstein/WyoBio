@@ -2,6 +2,40 @@
 <html manifest="wyobio.appcache">
   <head>
     <title>WyoBio</title>
+    
+    <link rel="shortcut icon" href="{{rt}}/favicon.ico" type="image/x-icon" />
+    <meta name="viewport" content="initial-scale=1.0">
+
+    <!-- Chrome Web app -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Web app -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{rt}}/images/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{rt}}/images/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{rt}}/images/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{rt}}/images/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{rt}}/images/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{rt}}/images/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{rt}}/images/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{rt}}/images/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{rt}}/images/icons/apple-touch-icon-180x180.png">
+
+    <link rel="shortcut icon" href="{{rt}}/images/icons/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="{{rt}}/images/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{rt}}/images/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{rt}}/images/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="{{rt}}/images/icons/android-chrome-192x192.png" sizes="192x192">
+    
+    <!-- Windows 8+ app -->
+    <meta name="application-name" content="WyoBio">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-square70x70logo" content="{{rt}}/images/icons/smalltile.png" />
+    <meta name="msapplication-square150x150logo" content="{{rt}}/images/icons/mediumtile.png" />
+    <meta name="msapplication-wide310x150logo" content="{{rt}}/images/icons/widetile.png" />
+    <meta name="msapplication-square310x310logo" content="{{rt}}/images/icons/largetile.png" />
+
     {{>head}}
   </head>
   <body>
@@ -11,11 +45,36 @@
       </div>
       <div data-role="content">
         <ul data-role="listview">
-          <li class="logged-out"><a href="/login"><img src="/images/login_g.png" alt="Add observation" align="left">Log In</a></li>
-          <li class="logged-in"><a href="/logout"><img src="/images/login_g.png" alt="Add observation" align="left">Log Out</a></li>
-          <li><a href="/observations/new"><img src="/images/add_g.png" alt="Add observation" align="left">Share Observation</a></li>
-          <li><a href="/observations"><img src="/images/obs_g.png" alt="Add observation" align="left">See Observations</a></li>
-          <li><a href="/species"><img src="/images/about_g.png" alt="Add observation" align="left">About WyoBio</a></li>
+          <li class="logged-out">
+            <a href="{{rt}}/login">
+              <img src="{{rt}}/images/login_g.png" alt="Add observation" align="left">
+              <h3>Log In</h3>
+            </a>
+          </li>
+          <li class="logged-in">
+            <a href="{{rt}}/logout">
+              <img src="{{rt}}/images/login_g.png" alt="Add observation" align="left">
+              <h3>Log Out</h3>
+            </a>
+          </li>
+          <li>
+            <a href="{{rt}}/observations/new">
+              <img src="{{rt}}/images/add_g.png" alt="Add observation" align="left">
+              <h3>Share Observation</h3>
+            </a>
+          </li>
+          <li>
+            <a href="{{rt}}/observations">
+              <img src="{{rt}}/images/obs_g.png" alt="Add observation" align="left">
+              <h3>See Observations</h3>
+            </a>
+          </li>
+          <li>
+            <a href="{{rt}}/about">
+              <img src="{{rt}}/images/about_g.png" alt="Add observation" align="left">
+              <h3>About WyoBio</h3>
+            </a>
+          </li>
         </ul>
         <p>Version {{version}}</p>
       </div>

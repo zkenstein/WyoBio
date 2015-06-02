@@ -10,7 +10,7 @@
         {{>home}}  
         <h1>{{label}}</h1>
         {{#outbox_id}}
-        <a href="/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
+        <a href="{{rt}}/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
         {{/outbox_id}}
        </div>
       <div data-role="content">
@@ -18,14 +18,14 @@
         <p>{{comments}}</p>
         {{#attachments}}
         <p>
-          <img src="/viewimage/{{id}}" style="max-width:100%">
+          <img src="{{svc}}/viewimage/{{id}}" style="max-width:100%">
         </p>
         {{/attachments}}
         {{^attachments}}
         {{#photos}}
         <img src="{{image_url}}"style="max-width:100%">
         {{/photos}}
-        {{^photos}}<img src="{{router_info.base_url}}/images/empty.png">{{/photos}}
+        {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
         {{/attachments}}
         
       </div>

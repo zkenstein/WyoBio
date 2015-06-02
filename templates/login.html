@@ -13,12 +13,12 @@
       <div class="ui-content" role="main">
         {{#is_authenticated}}
         <p>Logged in as {{user.username}}</p>
-        <a data-role="button" href="/logout">
+        <a data-role="button" href="{{rt}}/logout">
           Log Out
         </a>
         {{/is_authenticated}}
         {{^is_authenticated}}
-        <form action="/login/" data-ajax="false" method="post"
+        <form action="{{svc}}/login/" data-ajax="false" method="post"
             data-wq-json="true" data-wq-background-sync="false">
           {{>csrf}}
         <ul data-role="listview">
@@ -34,7 +34,7 @@
           <li>
             <div class="ui-grid-a">
               <div class="ui-block-a">
-                <a href="/" data-role="button">Cancel</a>
+                <a href="{{rt}}/" data-role="button">Cancel</a>
               </div>
               <div class="ui-block-b">
                 <button type="submit" data-theme="b">Log In</button>

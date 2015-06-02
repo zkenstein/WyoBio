@@ -1,0 +1,19 @@
+{
+  "name": "WyoBio",
+  "icons": [
+    {
+      "src": "/images/icons/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "density": "2.0"
+    },
+    {
+      "src": "/images/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "density": "4.0"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "fullscreen"
+}

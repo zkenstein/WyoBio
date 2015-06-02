@@ -9,17 +9,17 @@
       <div data-role="header">
         {{>home}}
         <h1>Observations</h1>
-        <a href="/observations/new" data-icon="plus">Add</a>
+        <a href="{{rt}}/observations/new" data-icon="plus">Add</a>
       </div>
       <div data-role="content">
         <ul data-role="listview">
         {{#unsynced}}
           <li data-role="list-divider">Outbox</li>
           {{#unsyncedItems}}
-          <li {{#error}}data-icon="alert"{{/error}}><a href="{{router_info.base_url}}/outbox/{{id}}">
+          <li {{#error}}data-icon="alert"{{/error}}><a href="{{rt}}/outbox/{{id}}">
             {{#data}}
             {{#first_photo}}<img src="{{image_url}}">{{/first_photo}}
-            {{^photos}}<img src="{{router_info.base_url}}/images/empty.png">{{/photos}}
+            {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
             <h3>{{species_guess}} on {{sampdate}}</h3>
             <p>{{comments}}</p>
             {{/data}}
@@ -35,21 +35,21 @@
             {{/is_authenticated}}
             {{^is_authenticated}}
             <div>
-              <a href="/login" data-role="button" data-icon="refresh">Log In to Sync</a>
+              <a href="{{rt}}/login" data-role="button" data-icon="refresh">Log In to Sync</a>
             </div>
             {{/is_authenticated}}
           </li>
           <li data-role="list-divider">Existing Items</li>
         {{/unsynced}}
         {{#list}}
-          <li><a href="/observations/{{id}}">
+          <li><a href="{{rt}}/observations/{{id}}">
             <h3>{{label}}</h3>
             <p>{{comments}}</p>
           </a></li>
         {{/list}}
         {{^list}}
           <li>No observations.</li>
-          <li data-icon="plus"><a href="/observations/new">Add Observation</a></li>
+          <li data-icon="plus"><a href="{{rt}}/observations/new">Add Observation</a></li>
         {{/list}}
         </ul>
       </div>
