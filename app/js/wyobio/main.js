@@ -18,6 +18,9 @@ $('body').on('logout', function() {
     app.prefetchAll();
     _showLogin(false);
 });
+$('body').on('filterablebeforefilter', "#species_list", _speciesLookup);
+$('body').on('click', "#species_list li", _speciesSelect);
+
 function _showLogin(loggedIn) {
     if (loggedIn) {
         $('.logged-in').show();
@@ -39,7 +42,19 @@ app.init(config).then(function() {
         _showLogin(app.user);
     })
     app.jqmInit();
-    app.prefetchAll();
+    app.prefetchAll().then(function() {
+        app.models.species.load().then(function(data) {
+            var types = {};
+            data.list.forEach(function(row){
+                if (row.elem_type) {
+                    types[row.elem_type] = true;
+                }
+            });
+            var type_list = Object.keys(types);
+            type_list.sort();
+            config.type_list = type_list;
+        });
+    })
 });
 
 
@@ -81,6 +96,47 @@ function _locatorMap(match, ui, params, hash, evt, $page) {
 	}
 
 	var locator = locate.locator(m, fields, opts);
+}
+
+function _speciesLookup(evt, data) {
+    var $ul = $(this),
+        $input = $(data.input),
+        value = $input.val().toLowerCase();
+    if (!value || value.length <= 2) {
+        $ul.html("");
+        return;
+    }
+    var type = $.mobile.activePage.find("#type").val();
+    $ul.html("species_loading");
+	$ul.listview("refresh");
+    app.models.species.load().then(function(data) {
+        var rows = [];
+        data.list.forEach(function(row) {
+            if (rows.length > 10) {
+                return;
+            }
+            if (row.elem_type != type) {
+                return;
+            }
+            var label = row.label.toLowerCase();
+            if (label.indexOf(value) > -1) {
+                rows.push(row);
+            }
+        });
+        
+        $ul.html(tmpl.render("species_choices", {'list': rows}));
+        $ul.listview("refresh");
+        $ul.trigger("updatelayout");
+    });
+					
+}
+
+function _speciesSelect() {
+    var $li = $(this);
+    var $page = $.mobile.activePage;
+    $page.find("#species_guess").val($li.html().trim());
+    $page.find("#species_id").val($li.data('id'));
+    $page.find("#species_list").html("");
 }
 
 });

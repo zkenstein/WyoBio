@@ -9,53 +9,95 @@
       <div data-role="header">
         {{>home}}
         <h1>Add Observation</h1>
-        <a href="/observations/new" data-icon="plus">Add</a>
       </div>
       <div class="ui-content" role="main">
         <form action="/observations/" data-ajax="false" method="post"
           {{#outbox_id}}
             data-wq-outbox-id="{{outbox_id}}"
-            data-wq-outbox-preserve="latitude,longitude,attachments[0][data]"
+            data-wq-outbox-preserve="latitude,longitude,photos"
           {{/outbox_id}}>
           {{>csrf}}
         <ul data-role="listview">
-                  <!--
           <li data-role="fieldcontain">
-            <label for="species">Species</label>
-            <select id="species" name="species_id" required>
+            <label for='type'>Species Type</label>
+            <select name="type" id="type" required>
+              <option value="">Select one...</option>
+            {{#type_list}}
+              {{>option}}
+            {{/type_list}}
+            </select>
+          </li>
+          <li data-role="fieldcontain">
+            <label for="species_guess">Species</label>
+            <input name="species_guess" id="species_guess" value="{{species_guess}}" "data-type="search">
+            <input type="hidden" id="species_id" name="species_id" value="{{species_id}}">
+            <!--
+              HTML5 way, once Safari supports it
+            <datalist id="species_list">
               <option value="">Enter a species...</option>
             {{#species_list}}
               <option value="{{id}}">{{label}}</option>
             {{/species_list}}
-            </select>
+            </datalist>
+            -->
+            <div>
+              <ul id='species_list' data-role='listview' data-inset='true' data-filter='true' data-input="#species_guess">
+              </ul>
+            </div>
           </li>
-                  -->
           <li data-role="fieldcontain">
             <label for="image">Photo</label>
-            {{#attachments[0][data].name}}
+            {{#photos}}
             <input type="text" id="image" disabled
-                   value="{{attachments[0][data].name}} ({{attachments[0][data].type}}, {{attachments[0][data].body.size}} bytes)">
-            {{/attachments[0][data].name}}
-            {{^attachments[0][data].name}}
-            <input type="file" multiple name="attachments[0][data]" id="image">
-            {{/attachments[0][data].name}}
-            <p class="error report-photo-errors"></p>
+                   value="{{name}} ({{type}}, {{body.size}} bytes)">
+            {{/photos}}
+            {{^photos}}
+            <input type="file" multiple name="photos" id="image">
+            {{/photos}}
+            <p class="error observation-photos-errors"></p>
           </li>
+
+          <!-- Other Domains -->
           <li data-role="fieldcontain">
-            <label for="sampdate">Date</label>
-            <input type="datetime-local" name="sampdate" id="sampdate" value="{{sampdate}}">
+            <label for='habitat_id'>Habitat</label>
+            <select name="habitat_id" id="habitat_id">
+              <option value="">Select one...</option>
+            {{#habitat_list}}
+              {{>option}}
+            {{/habitat_list}}
+            </select>
           </li>
-                  <!--
           <li data-role="fieldcontain">
             <label for='weather_id'>Weather Conditions</label>
             <select name="weather_id" id="weather_id">
               <option value="">Select one...</option>
             {{#weather_list}}
-              <option value="{{id}}">{{label}}</option>
+              {{>option}}
             {{/weather_list}}
             </select>
           </li>
-                  -->
+          <li data-role="fieldcontain">
+            <label for='phenology_id'>Plant Phenology</label>
+            <select name="phenology_id" id="phenology_id">
+              <option value="">Select one...</option>
+            {{#phenology_list}}
+              {{>option}}
+            {{/phenology_list}}
+            </select>
+          </li>
+          
+          <!-- Text Entry -->
+          <li data-role="fieldcontain">
+            <label for="sampdate">Date</label>
+            <input type="datetime-local" name="sampdate" id="sampdate" value="{{sampdate}}">
+            <p class="observation-sampdate-errors"></p>
+          </li>
+          <li data-role="fieldcontain">
+            <label for="size">Size</label>
+            <input type="tel" name="size" id="size" value="{{size}}">
+            <p class="observation-size-errors"></p>
+          </li>
+          
           {{^outbox_id}}{{^id}}
           <li data-role="fieldcontain">
             <fieldset data-role="controlgroup" data-type="horizontal">

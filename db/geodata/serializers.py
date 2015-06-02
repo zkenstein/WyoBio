@@ -9,10 +9,27 @@ class AttachmentSerializer(ModelSerializer):
         model = Attachment
         exclude = ['data']
 
+class DateTimeField(serializers.DateTimeField):
+    def to_representation(self, value):
+        if isinstance(value, str):
+            return value
+        return super().to_representation(value)
 
 class ObservationSerializer(ModelSerializer):
     id = serializers.ReadOnlyField()
     attachments = AttachmentSerializer(many=True, required=False)
+    sampdate = DateTimeField()
+    
+    def get_fields(self):
+        fields = super().get_fields()
+        fields.pop('sampdate_label')
+        return fields
+    
+    def to_internal_value(self, data):
+        for key in list(data.keys()):
+            if data[key] == "":
+                del data[key]
+        return super().to_internal_value(data)
     
     def create(self, validated_data):
         request = self.context['request']
@@ -32,14 +49,15 @@ class ObservationSerializer(ModelSerializer):
                 geometry=geom,
                 userid=request.user.id,
             )
-            validated_data['point'] = pt
+            # Reload point to get pntid
+            pt = Point.objects.get(pk=pt.pk)
+            validated_data['point_id'] = pt.pntid
             
 
         validated_data['username'] = username
         instance = super().create(validated_data)
-        for attachment in attachment_data:
-            # file = attachment['data']  # Why is this empty?
-            file = self.context['request'].FILES['attachments[0][data]']
+        photos = self.context['request'].FILES.getlist('photos')
+        for file in photos:
             attachment = {
                 'data': file.read(),
                 'att_name': file.name,
@@ -55,6 +73,10 @@ class ObservationSerializer(ModelSerializer):
         exclude = ['obsid']
 
 class NestedObservationSerializer(ModelSerializer):
+    def get_fields(self):
+        fields = super().get_fields()
+        fields.pop('sampdate_label')
+        return fields
     class Meta:
         model = Observation
         fields = ['id']
@@ -75,3 +97,7 @@ class PointSerializer(ModelSerializer):
        
     class Meta:
         model = Point
+
+class SpeciesSerializer(ModelSerializer):
+    class Meta:
+        fields = ('elem_type',)

@@ -18,9 +18,9 @@
           {{#unsyncedItems}}
           <li {{#error}}data-icon="alert"{{/error}}><a href="{{router_info.base_url}}/outbox/{{id}}">
             {{#data}}
-            {{#attachments[0][data]}}<img src="{{image_url}}">{{/attachments[0][data]}}
-            {{^attachments[0][data]}}<img src="{{router_info.base_url}}/images/empty.png">{{/attachments[0][data]}}
-            <h3>{{species_id}} on {{date}}</h3>
+            {{#first_photo}}<img src="{{image_url}}">{{/first_photo}}
+            {{^photos}}<img src="{{router_info.base_url}}/images/empty.png">{{/photos}}
+            <h3>{{species_guess}} on {{sampdate}}</h3>
             <p>{{comments}}</p>
             {{/data}}
           </a></li>

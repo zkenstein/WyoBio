@@ -22,8 +22,10 @@
         </p>
         {{/attachments}}
         {{^attachments}}
-        {{#attachments[0][data]}}<img src="{{image_url}}">{{/attachments[0][data]}}
-        {{^attachments[0][data]}}<img src="{{router_info.base_url}}/images/empty.png">{{/attachments[0][data]}}
+        {{#photos}}
+        <img src="{{image_url}}"style="max-width:100%">
+        {{/photos}}
+        {{^photos}}<img src="{{router_info.base_url}}/images/empty.png">{{/photos}}
         {{/attachments}}
         
       </div>

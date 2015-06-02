@@ -1,6 +1,8 @@
 from wq.db import rest
-from .models import Point, Observation, Weather
-from .serializers import PointSerializer, ObservationSerializer
+from .models import Point, Observation, Habitat, Weather, Phenology, Species
+from .serializers import (
+    PointSerializer, ObservationSerializer, SpeciesSerializer,
+)
 from .views import ObservationViewSet
 
 def point_filter(qs, request):
@@ -20,7 +22,7 @@ rest.router.register_model(
     filter=point_filter,
     per_page=100,
     max_local_pages=1,
-    partial=True,
+    # partial=True,
 )
 rest.router.register_model(
     Observation,
@@ -29,10 +31,18 @@ rest.router.register_model(
     filter=observation_filter,
     per_page=100,
     max_local_pages=1,
-    partial=True,
+    # partial=True,
 )
 
+rest.router.register_model(Habitat)
 rest.router.register_model(Weather)
+rest.router.register_model(Phenology)
+rest.router.register_model(
+    Species,
+    lookup="elcode",
+    serializer=SpeciesSerializer,
+    per_page=100000,
+)
 
 rest.router.add_page('index', {'url': ''})
 rest.router._extra_pages['login'][0]['postsave'] = 'index'
