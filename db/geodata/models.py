@@ -52,7 +52,7 @@ class Point(ArcGisModel):
     pntid = IncrementingField(db_column='pntID', unique=True)
     userid = models.CharField(db_column='userID', max_length=50, blank=True, null=True)
     coordcolmethod = models.CharField(db_column='coordColMethod', max_length=50, blank=True, null=True)
-    vetted = models.SmallIntegerField(blank=True, null=True)
+    vetted = models.SmallIntegerField(blank=True, null=True, default=0)
     geometry = PointField(
         db_column='SHAPE', blank=True, null=True, srid=3857
     )
@@ -89,7 +89,7 @@ class Observation(ArcGisModel):
     size = models.IntegerField(blank=True, null=True)
     speciesdescription = models.CharField(db_column='speciesDescription', max_length=250, blank=True, null=True)
     numpeople = models.IntegerField(db_column='numPeople', blank=True, null=True)
-    species_guess = models.CharField(max_length=50, blank=True, null=True)
+    species_guess = models.CharField(max_length=200, blank=True, null=True)
     county = models.CharField(max_length=100, blank=True, null=True)
     town = models.CharField(max_length=100, blank=True, null=True)
     school = models.CharField(max_length=100, blank=True, null=True)
@@ -100,8 +100,21 @@ class Observation(ArcGisModel):
     commonname = models.CharField(db_column='commonName', max_length=50, blank=True, null=True)
     scientificname = models.CharField(db_column='scientificName', max_length=50, blank=True, null=True)
     username = models.CharField(db_column='userName', max_length=50, blank=True, null=True)
-    vetted = models.SmallIntegerField(blank=True, null=True)
+    vetted = models.SmallIntegerField(db_column='vetted', blank=True, null=True, default=0)
+    sensitive = models.CharField(db_column='sensitive', max_length=5, blank=True, null=True, default='N')
 
+    def save(self, *args, **kwargs):
+        if self.species_id:
+            self.species_guess = None
+            self.scientificname = self.species.sname
+            if self.species.s_comname:
+                self.commonname = self.species.s_comname
+            elif self.species.g_comname:
+                self.commonname = self.species.g_comname
+        elif self.species_guess:
+            self.species_guess = self.species_guess[:50]
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         sampdate = self.sampdate
         if sampdate:

@@ -12,12 +12,19 @@ class Backend(ModelBackend):
             'password': password,
         })
 
-        uid = int(response.text)
-        if uid:
+        data = response.json()
+        if data:
+            # Search for or create user with matching id
             user, is_new = User.objects.get_or_create(
-                id=uid,
+                id=data['uID'],
                 username=username
             )
+            # Copy additional fields
+            user.is_active = (data['uIsActive'] == "1")
+            user.save()
+            
+            if not user.is_active:
+                return None
             return user
         else:
             return None
