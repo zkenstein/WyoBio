@@ -1,3 +1,19 @@
 #species_list li {
     cursor: pointer;
 }
+
+
+.ui-checkbox input {
+  outline: 1px solid white !important;
+  z-index: 999;
+}
+/*
+.ui-checkbox input, .ui-radio input {
+  outline: 1px solid white !important;
+  z-index: 999;
+}*/
+
+.error {
+  clear: both;
+  color: red;
+}

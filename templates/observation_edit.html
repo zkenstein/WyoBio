@@ -1,150 +1,197 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Add Observation</title>
-    {{>head}}
-  </head>
-  <body>
-    <div data-role="page" class="ui-page">
-      <div data-role="header">
-        {{>home}}
-        <h1>Add Observation</h1>
-      </div>
-      <div class="ui-content" role="main">
-        <form action="{{svc}}/observations/" data-ajax="false" method="post"
-          {{#outbox_id}}
-            data-wq-outbox-id="{{outbox_id}}"
-            data-wq-outbox-preserve="latitude,longitude,photos"
-          {{/outbox_id}}>
-          {{>csrf}}
-        <ul data-role="listview">
-          <li data-role="fieldcontain">
-            <label for='type'>Species Type</label>
-            <select name="type" id="type" required>
-              <option value="">Select one...</option>
-            {{#type_list}}
-              {{>option}}
-            {{/type_list}}
-            </select>
-          </li>
-          <li data-role="fieldcontain">
-            <label for="species_guess">Species</label>
-            <input name="species_guess" id="species_guess" value="{{species_guess}}" "data-type="search">
-            <input type="hidden" id="species_id" name="species_id" value="{{species_id}}">
-            <!--
-              HTML5 way, once Safari supports it
-            <datalist id="species_list">
-              <option value="">Enter a species...</option>
-            {{#species_list}}
-              <option value="{{id}}">{{label}}</option>
-            {{/species_list}}
-            </datalist>
-            -->
-            <div>
-              <ul id='species_list' data-role='listview' data-inset='true' data-filter='true' data-input="#species_guess">
-              </ul>
-            </div>
-          </li>
-          <li data-role="fieldcontain">
-            <label for="image">Photo</label>
-            {{#photos}}
-            <input type="text" id="image" disabled
-                   value="{{name}} ({{type}}, {{body.size}} bytes)">
-            {{/photos}}
-            {{^photos}}
-            <input type="file" accept="image/*" capture name="photos" id="image">
-            {{/photos}}
-            <p class="error observation-photos-errors"></p>
-          </li>
+    <head>
+        <title>Add Observation</title>
+        {{>head}}
 
-          <!-- Other Domains -->
-          <li data-role="fieldcontain">
-            <label for='habitat_id'>Habitat</label>
-            <select name="habitat_id" id="habitat_id">
-              <option value="">Select one...</option>
-            {{#habitat_list}}
-              {{>option}}
-            {{/habitat_list}}
-            </select>
-          </li>
-          <li data-role="fieldcontain">
-            <label for='weather_id'>Weather Conditions</label>
-            <select name="weather_id" id="weather_id">
-              <option value="">Select one...</option>
-            {{#weather_list}}
-              {{>option}}
-            {{/weather_list}}
-            </select>
-          </li>
-          <li data-role="fieldcontain">
-            <label for='phenology_id'>Plant Phenology</label>
-            <select name="phenology_id" id="phenology_id">
-              <option value="">Select one...</option>
-            {{#phenology_list}}
-              {{>option}}
-            {{/phenology_list}}
-            </select>
-          </li>
-          
-          <!-- Text Entry -->
-          <li data-role="fieldcontain">
-            <label for="sampdate">Date</label>
-            <input type="datetime-local" name="sampdate" id="sampdate" value="{{sampdate}}">
-            <p class="observation-sampdate-errors"></p>
-          </li>
-          <li data-role="fieldcontain">
-            <label for="size">Size</label>
-            <input type="tel" name="size" id="size" value="{{size}}">
-            <p class="observation-size-errors"></p>
-          </li>
-          
-          {{^outbox_id}}{{^id}}
-          <li data-role="fieldcontain">
-            <fieldset data-role="controlgroup" data-type="horizontal">
-              <legend>Location Mode</legend>
-              <input type='radio' value='gps' id='loc-gps' name='mode' checked>
-              <label for='loc-gps'>Current</label>
-              <input type='radio' value='interactive' id='loc-interactive' name='mode'>
-              <label for='loc-interactive'>Use Map</label>
-              <input type='radio' value='manual' id='loc-manual' name='mode'>
-              <label for='loc-manual'>Enter Coords</label>
-            </fieldset>
-          </li>
-          <li data-role="fieldcontain" class='edit-loc'>
-            <label for="longitude">Longitude</label>
-            <input id="longitude" name="longitude" type="tel" value="{{longitude}}">
-          </li>
-          <li data-role="fieldcontain" class='edit-loc'>
-            <label for="latitude">Latitude</label>
-            <input id="latitude" name="latitude" type="tel" value="{{latitude}}">
-          </li>
-          <li data-role="fieldcontain" class='edit-loc'>
-            <label for="accuracy">Accuracy</label>
-            <input id="accuracy" name="accuracy" type="tel" value="{{accuracy}}">
-          </li>
-          <li data-role="fieldcontain">
-            <div id="observation-new-map" style="height:300px;"></div>
-          </li>
-          {{/id}}{{/outbox_id}}
-          <li class='view-loc'>{{>view_loc}}</li>
-          <li data-role="fieldcontain">
-            <label for="comments">Comments</label>
-            <textarea name="comments" id="comments">{{comments}}</textarea>
-          </li>
-          <li><p class="error observation-errors"></p></li>
-          <li>
-            <div class="ui-grid-a">
-              <div class="ui-block-a">
-                <a href="{{rt}}/" data-role="button">Cancel</a>
-              </div>
-              <div class="ui-block-b">
-                <button type="save" data-theme="b">save</button>
-              </div>
+
+
+
+    </head>
+    <body>
+        <div data-role="page" class="ui-page">
+            <div data-role="header">
+                {{>home}}
+                <h1>Add Observation</h1>
             </div>
-          </div>
-        </ul>
-        </form>
-      </div>
-    </div>
-  </body>
+            <div class="ui-content" role="main">
+                <form action="{{svc}}/observations/" data-ajax="false" method="post"
+                      {{#outbox_id}}
+                      data-wq-outbox-id="{{outbox_id}}"
+                      data-wq-outbox-preserve="latitude,longitude,photos"
+                      {{/outbox_id}}>
+                      {{>csrf}}
+                      <ul data-role="listview">
+                        <li data-role="fieldcontain" >
+                            <label for='type' >Species Type (required*)</label>
+                            <select name="type" id="type" required style="color: black;">
+                                <option value=""  >Select one...</option>
+                                {{#type_list}}
+                                {{>option}}
+                                {{/type_list}}
+                            </select>           
+                            <p class="error observation-type-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain" id="inputSpecies">
+                            <label for="species_guess">Species (required*)</label>
+                            <input name="species_guess" id="species_guess"  value="{{species_guess}}" data-type="search" required>
+                            <input type="hidden" id="species_id" name="species_id" value="{{species_id}}" >
+                            <p class="error observation-species_guess-errors"></p>
+                            <p class="error observation-species_id-errors"></p>
+                            <!--
+                              HTML5 way, once Safari supports it
+                            <datalist id="species_list">
+                              <option value="">Enter a species...</option>
+                            {{#species_list}}
+                              <option value="{{id}}">{{label}}</option>
+                            {{/species_list}}
+                            </datalist>
+                            -->
+
+
+                            <div>
+                                <ul id='species_list' data-role='listview' data-inset='true' data-filter='true' data-input="#species_guess">
+                                </ul>
+                                <p class="error observation-species_list-errors"></p>
+                            </div>
+                        </li>
+<!--                        <li data-role="fieldcontain" id="inputGuess" style=" display: none">
+                            <label for="species_guess1">Species Guess</label>
+                            <input type="text" name="species_guess1" id="species_guess1"  value="{{species_guess}}" placeholder="Enter Species Guess">
+                        </li>-->
+
+                        <li data-role="fieldcontain" id="inSensitive" style=" display: none">
+                            <label for="sensitive">Sensitive</label>
+                            <input type="text" name="sensitive" id="sensitive" value="{{sensitive}}" >
+                            <p class="observation-sensitive-errors"></p>
+                        </li>
+
+                       
+                        <!-- Text Entry -->
+                        <li data-role="fieldcontain">
+                            <label for="sampdate">Date (required*)</label>
+                            <input type="datetime-local" name="sampdate" id="sampdate" required value="{{sampdate}}" >
+                            <p class="observation-sampdate-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <label for="searchdurationsec">Search Time</label>
+                            <input type="tel" name="searchdurationsec" id="searchdurationsec" value="{{searchdurationsec}}" placeholder="Duration in Minutes">
+                            <p class="observation-searchdurationsec-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <label for="size">Sample Size</label>
+                            <input type="tel" name="size" id="size" value="{{size}}" placeholder="Number of Individuals">
+                            <p class="observation-size-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <label for="numpeople">Number of People</label>
+                            <input type="tel" name="numpeople" id="numpeople" value="{{numpeople}}"  placeholder="Number of Observers">
+                            <p class="observation-numpeople-errors"></p>
+                        </li>
+                        <!-- Other Domains -->
+<!--                        <li data-role="fieldcontain">
+                            <label for='habitat_id'>Land Cover (Vegetation) Type</label>
+                            <select name="habitat_id" id="habitat_id">
+                                <option value="">Select one...</option>
+                                {{#habitat_list}}
+                                {{>option}}
+                                {{/habitat_list}}
+                            </select>
+                        </li>-->
+<!--                        <li data-role="fieldcontain">
+                            <label for='weather_id'>Weather Conditions</label>
+                            <select name="weather_id" id="weather_id">
+                                <option value="">Select one...</option>
+                                {{#weather_list}}
+                                {{>option}}
+                                {{/weather_list}}
+                            </select>
+                        </li>-->
+<!--                        <li data-role="fieldcontain">
+                            <label for='phenology_id'>Plant Phenology</label>
+                            <select name="phenology_id" id="phenology_id">
+                                <option value="">Select one...</option>
+                                {{#phenology_list}}
+                                {{>option}}
+                                {{/phenology_list}}
+                            </select>
+                        </li>-->
+
+                        <li data-role="fieldcontain">
+                            <label for="speciesdescription">Species Description</label>
+                            <textarea name="speciesdescription" id="speciesdescription">{{speciesdescription}}</textarea>
+                             <p class="observation-speciesdescription-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <label for="comments">Comments</label>
+                            <textarea name="comments" id="comments">{{comments}}</textarea>
+                            <p class="observation-comments-errors"></p>
+                        </li>
+
+                        <li data-role="fieldcontain">
+                            <label for="image">Photo</label>
+                            {{#photos}}
+                            <input type="text" id="image" disabled
+                                   value="{{name}} ({{type}}, {{body.size}} bytes)">
+                            {{/photos}}
+                            {{^photos}}
+                            <input type="file" accept="image/*" capture name="photos" id="image">
+                            {{/photos}}
+                            <p class="error observation-image-errors"></p>
+                        </li>
+
+
+                        {{^outbox_id}}{{^id}}
+                        <li data-role="fieldcontain">
+                            <fieldset data-role="controlgroup" data-type="horizontal">
+                                <legend>Location Mode</legend>
+                                <input type='radio' value='gps' id='loc-gps' name='mode' checked>
+                                <label for='loc-gps'>Current</label>
+                                <input type='radio' value='interactive' id='loc-interactive' name='mode'>
+                                <label for='loc-interactive'>Use Map</label>
+                                <input type='radio' value='manual' id='loc-manual' name='mode'>
+                                <label for='loc-manual'>Enter Coords</label>
+                            </fieldset>
+                            <p class="error observation-loc-gps-errors"></p>
+                            <p class="error observation-loc-interactive-errors"></p>
+                            <p class="error observation-loc-manual-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain" class='edit-loc'>
+                            <label for="longitude">Longitude</label>
+                            <input id="longitude" name="longitude" type="tel" required value="{{longitude}}">
+                            <p class="error observation-longitude-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain" class='edit-loc'>
+                            <label for="latitude">Latitude</label>
+                            <input id="latitude" name="latitude" type="tel" required value="{{latitude}}">
+                             <p class="error observation-latitude-errors"></p>
+                        </li>
+                        <li data-role="fieldcontain" class='edit-loc'>
+                            <label for="accuracy">Accuracy</label>
+                            <input id="accuracy" name="accuracy" type="tel" value="{{accuracy}}">
+                             <p class="error observation-accuracy-errors"></p>
+                        </li>
+                       
+                        <li data-role="fieldcontain">
+                            <div id="observation-new-map" style="height:300px;"></div>
+                        </li>
+                        {{/id}}{{/outbox_id}}
+                        
+                        <li class='view-loc'>{{>view_loc}}</li>
+                        <li><p class="error observation-errors"></p></li>
+                        <li>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    <a href="{{rt}}/" data-role="button">Cancel</a>
+                                </div>
+                                <div class="ui-block-b">
+                                    <button type="submit" data-theme="b">Save</button>
+                                </div>
+                            </div> 
+                    </ul>
+                </form>
+                
+            </div>
+        </div>
+    </body>
 </html>

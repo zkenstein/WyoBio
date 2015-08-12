@@ -1,58 +1,67 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Observations</title>
-    {{>head}}
-  </head>
-  <body>
-    <div data-role="page" class="ui-page" data-wq-sync-refresh="true">
-      <div data-role="header">
-        {{>home}}
-        <h1>Observations</h1>
-        <a href="{{rt}}/observations/new" data-icon="plus">Add</a>
-      </div>
-      <div data-role="content">
-        <ul data-role="listview">
-        {{#unsynced}}
-          <li data-role="list-divider">Outbox</li>
-          {{#unsyncedItems}}
-          <li {{#error}}data-icon="alert"{{/error}}><a href="{{rt}}/outbox/{{id}}">
-            {{#data}}
-            {{#first_photo}}<img src="{{image_url}}">{{/first_photo}}
-            {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
-            <h3>{{species_guess}} on {{sampdate}}</h3>
-            <p>{{comments}}</p>
-            {{/data}}
-          </a></li>
-          {{/unsyncedItems}}
-          <li>
-            {{#is_authenticated}}
-            <button class="sync" data-icon="refresh"
-                onclick="require('wq/app').sync(true)">
-              {{#syncing}}Syncing...{{/syncing}}
-              {{^syncing}}Sync Now{{/syncing}}
-            </button>
-            {{/is_authenticated}}
-            {{^is_authenticated}}
-            <div>
-              <a href="{{rt}}/login" data-role="button" data-icon="refresh">Log In to Sync</a>
+    <head>
+        <title>Observations</title>
+
+        {{>head}}
+    </head>
+    <body>
+        <div data-role="page" class="ui-page" data-wq-sync-refresh="true">
+            <div data-role="header">
+                {{>home}}
+                <h1>Observations</h1>
+                <a href="{{rt}}/observations/new" data-icon="plus">Add</a>
             </div>
-            {{/is_authenticated}}
-          </li>
-          <li data-role="list-divider">Existing Items</li>
-        {{/unsynced}}
-        {{#list}}
-          <li><a href="{{rt}}/observations/{{id}}">
-            <h3>{{label}}</h3>
-            <p>{{comments}}</p>
-          </a></li>
-        {{/list}}
-        {{^list}}
-          <li>No observations.</li>
-          <li data-icon="plus"><a href="{{rt}}/observations/new">Add Observation</a></li>
-        {{/list}}
-        </ul>
-      </div>
-    </div>
-  </body>
+            <div data-role="content">
+                <ul data-role="listview">
+                    {{#unsynced}}
+                    <li data-role="list-divider">Outbox</li>
+                    {{#unsyncedItems}}
+                    <li {{#error}} data-icon="alert"{{/error}}><a href="{{rt}}/outbox/{{id}}">
+                            {{#data}}
+                            {{#first_photo}}<img src="{{image_url}}">{{/first_photo}}
+                            {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
+                            <h3>{{species_guess}} on {{sampdate}}</h3>
+                            <p>{{comments}}</p>
+                            {{/data}}
+                        </a>
+                    </li>
+                    {{/unsyncedItems}}
+                    <li>
+                        {{#is_authenticated}}
+                        <button class="sync" data-icon="refresh"
+                                onclick="{
+                                            require('wq/app').sync(true);
+                                        }">
+                            {{#syncing}}Syncing...{{/syncing}}
+                            {{^syncing}}Sync Now{{/syncing}}
+                        </button>
+                        {{/is_authenticated}}
+                        {{^is_authenticated}}
+                        <div>
+                            <a href="{{rt}}/login" data-role="button" data-icon="refresh">Log In to Sync</a>
+                        </div>
+                        {{/is_authenticated}}
+                    </li>
+                    <li data-role="list-divider">Existing Items</li>
+                    {{/unsynced}}
+                    {{#list}}
+                    <li ><a href="{{rt}}/observations/{{id}}">
+
+                            {{#attachments}}<img src="{{svc}}/viewimage/{{id}}" style="width:128px">{{/attachments}}
+                            {{^attachments}}<img src="{{rt}}/images/empty.png">{{/attachments}}
+
+                            <h3>{{label}}</h3>
+                            <p>{{comments}}</p>
+                        </a>
+                    </li>
+                    {{/list}}
+                    {{^list}}
+                    <li>No observations.</li>
+                    <li data-icon="plus"><a href="{{rt}}/observations/new">Add Observation</a></li>
+                    {{/list}}
+                </ul>
+            </div>
+        </div>
+    </body>
 </html>

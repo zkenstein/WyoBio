@@ -62,7 +62,8 @@ class Point(ArcGisModel):
 
     class Meta:
         managed = False
-        db_table = 'POINTSWM84'
+        db_table = 'POINTUV_WEB'
+		
 
 
 class Observation(ArcGisModel):
@@ -82,10 +83,11 @@ class Observation(ArcGisModel):
     weather = models.ForeignKey("Weather", db_column='weatherConditions', max_length=250, blank=True, null=True)
     habitat = models.ForeignKey("Habitat", db_column='habDesc', max_length=100, blank=True, null=True)
     phenology = models.ForeignKey("Phenology", db_column='plantPhenology', max_length=250, blank=True, null=True)
-    
+   
+	
     # Other fields
     sampdate = models.DateTimeField(db_column='sampDate', blank=True, null=True)
-    type = models.CharField(max_length=50, blank=True, null=True)
+    type = models.CharField(db_column='elemType',max_length=50, blank=True, null=True)
     size = models.IntegerField(blank=True, null=True)
     speciesdescription = models.CharField(db_column='speciesDescription', max_length=250, blank=True, null=True)
     numpeople = models.IntegerField(db_column='numPeople', blank=True, null=True)
@@ -101,7 +103,7 @@ class Observation(ArcGisModel):
     scientificname = models.CharField(db_column='scientificName', max_length=50, blank=True, null=True)
     username = models.CharField(db_column='userName', max_length=50, blank=True, null=True)
     vetted = models.SmallIntegerField(db_column='vetted', blank=True, null=True, default=0)
-    sensitive = models.CharField(db_column='sensitive', max_length=5, blank=True, null=True, default='N')
+    sensitive = models.CharField(db_column='sensitive', max_length=5, blank=True, null=True, default='No')
 
     def save(self, *args, **kwargs):
         if self.species_id:
@@ -129,7 +131,7 @@ class Observation(ArcGisModel):
 
     class Meta:
         managed = False
-        db_table = 'POINTSOBS'
+        db_table = 'SPECIESOBSERVED'
         unique_together = (('point', 'obsid'),)
         ordering = ["-sampdate"]
 
@@ -144,7 +146,7 @@ class Attachment(ArcGisModel):
 
     class Meta:
         managed = False
-        db_table = 'POINTSOBS__ATTACH_1'
+        db_table = 'SPECIESOBSERVED__ATTACH'
 
 
 class Domain(models.Model):
@@ -218,6 +220,8 @@ class Species(models.Model):
     def __str__(self):
         if self.s_comname:
             return "%s (%s)" % (self.s_comname, self.sname)
+        elif self.g_comname:
+            return "%s (%s)" % (self.g_comname, self.sname)
         else:
             return self.sname
     

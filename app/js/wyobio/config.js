@@ -10,12 +10,11 @@ config.type_list = [
     'Crustacean',
     'Fish',
     'Insect',
-    'Lichen',
+    'Fungi',
     'Mammal',
     'Mollusc',
-    'Non-Vascular Plant',
-    'Reptile',
-    'Vascular Plant'
+    'Plant',
+    'Reptile'
 ];
 
 config.template = {
@@ -35,8 +34,8 @@ config.template = {
                 types.push({
                     'id': name,
                     'label': name,
-                    'selected': name == this.type
-                })
+                    'selected': name === this.type
+                });
             }, this);
             return types;
         }

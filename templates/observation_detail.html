@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{label}}</title>
-    {{>head}}
-  </head>
-  <body>
-    <div data-role="page" class="ui-page">
-      <div data-role="header">
-        {{>home}}  
-        <h1>{{label}}</h1>
-        {{#outbox_id}}
-        <a href="{{rt}}/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
-        {{/outbox_id}}
-       </div>
-      <div data-role="content">
-        <h3>{{label}}</h3>
-        <p>{{comments}}</p>
-        {{#attachments}}
-        <p>
-          <img src="{{svc}}/viewimage/{{id}}" style="max-width:100%">
-        </p>
-        {{/attachments}}
-        {{^attachments}}
-        {{#photos}}
-        <img src="{{image_url}}"style="max-width:100%">
-        {{/photos}}
-        {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
-        {{/attachments}}
-        
-      </div>
-    </div>
-  </body>
+    <head>
+        <title>{{label}}</title>
+        {{>head}}
+    </head>
+    <body>
+        <div data-role="page" class="ui-page">
+            <div data-role="header">
+                {{>home}}  
+                <h1>{{label}}</h1>
+                {{#outbox_id}}
+                <a href="{{rt}}/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
+                {{/outbox_id}}
+            </div>
+            <div data-role="content">
+                <p><b>Scientific Name</b>: <i>{{scientificname}}</i></p>
+                <p><b>Common Name</b>: <i>{{commonname}}</i></p>
+                <p><b>Species Guess</b>: <i>{{species_guess}}</i></p>
+                <p><b>Sample Date</b>: <i>{{sampdate}}</i></p>
+                <p><b>Search Duration (seconds)</b>: <i>{{searchdurationsec}}</i></p>
+                <p><b>Sample Size</b>: <i>{{size}}</i></p>
+                <p><b>Number of People</b>: <i>{{numpeople}}</i></p>
+                <p><b>Species Description</b>: <i>{{speciesdescription}}</i></p>
+                <p><b>Comments</b>: <i>{{comments}}</i></p>
+                {{#attachments}}
+                <p>
+                    <img src="{{svc}}/viewimage/{{id}}" style="width:300px">
+                </p>
+                {{/attachments}}
+                {{^attachments}}
+                {{#photos}}
+                <img src="{{image_url}}" style="width:300px">
+                {{/photos}}
+                {{^photos}}<img src="{{rt}}/images/empty.png">{{/photos}}
+                {{/attachments}}
+
+            </div>
+
+        </div>
+    </body>
 </html>

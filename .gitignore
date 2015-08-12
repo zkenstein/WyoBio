@@ -6,3 +6,7 @@ themes.css
 *.appcache
 rjs*
 *.db
+/nbproject/private/
+app/images/icons/desktop.ini
+nbproject/project.xml
+nbproject/project.properties
