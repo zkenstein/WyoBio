@@ -1,5 +1,7 @@
-define(["data/config", "data/version", "data/templates"],
-function(config, version, templates) {
+define(["data/config", "data/version", "data/templates", "module"],
+function(config, version, templates, module) {
+
+var overrides = module.config();
 
 config.debug = true;
 
@@ -52,6 +54,10 @@ config.transitions = {
 config.map = {
     'bounds': [[40.9, -111], [45.0, -104]]
 };
+
+for (var key in overrides) {
+    config[key] = overrides[key];
+}
 
 return config;
 

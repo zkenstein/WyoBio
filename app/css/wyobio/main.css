@@ -2,16 +2,10 @@
     cursor: pointer;
 }
 
-
-.ui-checkbox input {
-  outline: 1px solid white !important;
-  z-index: 999;
+.ui-btn.ui-checkbox-off:after {
+   opacity: 1;
+   background-color: #fff;
 }
-/*
-.ui-checkbox input, .ui-radio input {
-  outline: 1px solid white !important;
-  z-index: 999;
-}*/
 
 .error {
   clear: both;

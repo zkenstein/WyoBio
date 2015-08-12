@@ -1,6 +1,8 @@
 *.pyc
 local_settings.py
 htdocs
+htdocs-build
+native/build
 lib
 themes.css
 *.appcache

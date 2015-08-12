@@ -15,7 +15,7 @@
                 <h1>Add Observation</h1>
             </div>
             <div class="ui-content" role="main">
-                <form action="{{svc}}/observations/" data-ajax="false" method="post"
+                <form action="{{rt}}/observations/" data-ajax="false" method="post"
                       {{#outbox_id}}
                       data-wq-outbox-id="{{outbox_id}}"
                       data-wq-outbox-preserve="latitude,longitude,photos"
@@ -60,9 +60,10 @@
                             <input type="text" name="species_guess1" id="species_guess1"  value="{{species_guess}}" placeholder="Enter Species Guess">
                         </li>-->
 
-                        <li data-role="fieldcontain" id="inSensitive" style=" display: none">
+                        <li data-role="fieldcontain">
                             <label for="sensitive">Sensitive</label>
-                            <input type="text" name="sensitive" id="sensitive" value="{{sensitive}}" >
+                            <input type="checkbox" name="sensitive" id="sensitive" value="Yes"
+                                 {{#sensitive}}checked{{/sensitive}}>
                             <p class="error observation-sensitive-errors"></p>
                         </li>
 

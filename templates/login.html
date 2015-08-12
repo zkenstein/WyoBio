@@ -18,7 +18,7 @@
         </a>
         {{/is_authenticated}}
         {{^is_authenticated}}
-        <form action="{{svc}}/login/" data-ajax="false" method="post"
+        <form action="{{rt}}/login/" data-ajax="false" method="post"
             data-wq-json="true" data-wq-background-sync="false">
           {{>csrf}}
         <ul data-role="listview">

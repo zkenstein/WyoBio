@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WyoBio</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=yes" />
+    <link rel="stylesheet" type="text/css" href="css/wyobio.css">
+    <script src="cordova.js"></script>
+    <script src="js/lib/require.js"></script>
+    <script>
+       function getBaseUrl() {
+           var baseurl = window.location.pathname.replace("index.html",'');
+           baseurl = baseurl.replace(/\/$/,'');
+           if (baseurl == 'www') {
+               // Windows
+               baseurl = '/www';
+           }
+           return baseurl;
+       }
+       require.config({
+           'config': {
+               'wyobio/config': {
+                   'store': {
+                       'service': 'http://wyobio.wq.io',
+                       'defaults': {'format': 'json'}
+                   },
+                   'router': {
+                       'base_url': getBaseUrl()
+                   }
+               }
+           }
+       });
+//        document.addEventListener('deviceready', function() {
+            require(['js/wyobio']);
+//        }, false);       
+    </script>
+  </head>
+  <body>
+    <div data-role="page" class="ui-page">
+      <div data-role="header">
+        <h1>WyoBio</h1>
+      </div>
+      <div data-role="content">
+        <ul data-role="listview">
+          <li class="logged-out">
+            <a href="login">
+              <img src="images/login_g.png" alt="Logout" align="left">
+              <h3>Log In</h3>
+            </a>
+          </li>
+          <li class="logged-in">
+            <a href="logout">
+              <img src="images/login_g.png" alt="Login" align="left">
+              <h3>Log Out</h3>
+            </a>
+          </li>
+          <li>
+            <a href="observations/new">
+              <img src="images/add_g.png" alt="Add observation" align="left">
+              <h3>Add Observation</h3>
+            </a>
+          </li>
+          <li>
+            <a href="observations">
+              <img src="images/obs_g.png" alt="My Observations" align="left">
+              <h3>My Observations</h3>
+            </a>
+          </li>
+          <li>
+            <a href="about">
+              <img src="images/about_g.png" alt="About WyoBio" align="left">
+              <h3>About WyoBio</h3>
+            </a>
+          </li>
+        </ul>
+        <p>BETA Version {{version}}</p>
+      </div>
+    </div>
+  </body>
+</html>
+ 
