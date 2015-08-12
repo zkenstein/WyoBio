@@ -63,7 +63,7 @@
                         <li data-role="fieldcontain" id="inSensitive" style=" display: none">
                             <label for="sensitive">Sensitive</label>
                             <input type="text" name="sensitive" id="sensitive" value="{{sensitive}}" >
-                            <p class="observation-sensitive-errors"></p>
+                            <p class="error observation-sensitive-errors"></p>
                         </li>
 
                        
@@ -71,22 +71,22 @@
                         <li data-role="fieldcontain">
                             <label for="sampdate">Date (required*)</label>
                             <input type="datetime-local" name="sampdate" id="sampdate" required value="{{sampdate}}" >
-                            <p class="observation-sampdate-errors"></p>
+                            <p class="error observation-sampdate-errors"></p>
                         </li>
                         <li data-role="fieldcontain">
                             <label for="searchdurationsec">Search Time</label>
                             <input type="tel" name="searchdurationsec" id="searchdurationsec" value="{{searchdurationsec}}" placeholder="Duration in Minutes">
-                            <p class="observation-searchdurationsec-errors"></p>
+                            <p class="error observation-searchdurationsec-errors"></p>
                         </li>
                         <li data-role="fieldcontain">
                             <label for="size">Sample Size</label>
                             <input type="tel" name="size" id="size" value="{{size}}" placeholder="Number of Individuals">
-                            <p class="observation-size-errors"></p>
+                            <p class="error observation-size-errors"></p>
                         </li>
                         <li data-role="fieldcontain">
                             <label for="numpeople">Number of People</label>
                             <input type="tel" name="numpeople" id="numpeople" value="{{numpeople}}"  placeholder="Number of Observers">
-                            <p class="observation-numpeople-errors"></p>
+                            <p class="error observation-numpeople-errors"></p>
                         </li>
                         <!-- Other Domains -->
 <!--                        <li data-role="fieldcontain">
@@ -120,26 +120,32 @@
                         <li data-role="fieldcontain">
                             <label for="speciesdescription">Species Description</label>
                             <textarea name="speciesdescription" id="speciesdescription">{{speciesdescription}}</textarea>
-                             <p class="observation-speciesdescription-errors"></p>
+                             <p class="error observation-speciesdescription-errors"></p>
                         </li>
                         <li data-role="fieldcontain">
                             <label for="comments">Comments</label>
                             <textarea name="comments" id="comments">{{comments}}</textarea>
-                            <p class="observation-comments-errors"></p>
+                            <p class="error observation-comments-errors"></p>
                         </li>
 
+                        {{^photos}}
+                        {{>new_photo}}
+                        <li>
+                            <button type="button" data-icon="plus" class="addphoto">
+                               Add Another Photo
+                            </button>
+                        </li>
+                        {{/photos}}
+                        
+                        {{#photos}}
                         <li data-role="fieldcontain">
+                            <img src="{{image_url}}">
                             <label for="image">Photo</label>
-                            {{#photos}}
                             <input type="text" id="image" disabled
-                                   value="{{name}} ({{type}}, {{body.size}} bytes)">
-                            {{/photos}}
-                            {{^photos}}
-                            <input type="file" accept="image/*" capture name="photos" id="image">
-                            {{/photos}}
-                            <p class="error observation-image-errors"></p>
+                                value="{{name}} ({{type}}, {{body.size}} bytes)">
+                            <p class="error observation-photos-errors"></p>
                         </li>
-
+                        {{/photos}}
 
                         {{^outbox_id}}{{^id}}
                         <li data-role="fieldcontain">
@@ -152,9 +158,6 @@
                                 <input type='radio' value='manual' id='loc-manual' name='mode'>
                                 <label for='loc-manual'>Enter Coords</label>
                             </fieldset>
-                            <p class="error observation-loc-gps-errors"></p>
-                            <p class="error observation-loc-interactive-errors"></p>
-                            <p class="error observation-loc-manual-errors"></p>
                         </li>
                         <li data-role="fieldcontain" class='edit-loc'>
                             <label for="longitude">Longitude</label>
@@ -177,7 +180,9 @@
                         </li>
                         {{/id}}{{/outbox_id}}
                         
-                        <li class='view-loc'>{{>view_loc}}</li>
+                        <li class='view-loc'>
+                            {{>view_loc}}
+                        </li>
                         <li><p class="error observation-errors"></p></li>
                         <li>
                             <div class="ui-grid-a">

@@ -18,8 +18,13 @@ class DateTimeField(serializers.DateTimeField):
 class ObservationSerializer(ModelSerializer):
     id = serializers.ReadOnlyField()
     attachments = AttachmentSerializer(many=True, required=False)
+    first_attachment = serializers.SerializerMethodField()
     sampdate = DateTimeField()
     
+    def get_first_attachment(self, instance):
+        if instance.attachments.count() > 0:
+            return instance.attachments.values_list('pk', flat=True)[0]
+            
     def get_fields(self):
         fields = super().get_fields()
         fields.pop('sampdate_label')
@@ -43,14 +48,21 @@ class ObservationSerializer(ModelSerializer):
         if lat and lng:
             geom = GeosPoint([float(lng), float(lat)], srid=4326)
             geom.transform(3857)
-            # FIXME: Check for existing Point at same location
-            # (need another PointField hack to make the query work)
-            pt = Point.objects.create(
-                geometry=geom,
+            points = Point.objects.filter(
                 userid=request.user.id,
+            ).extra(
+                where=["[SHAPE].STDistance(geometry::STPointFromText(%s, 3857)) < %s"],
+                params=[geom.wkt, 10],
             )
-            # Reload point to get pntid
-            pt = Point.objects.get(pk=pt.pk)
+            if points.count() > 0:
+                pt = points[0]
+            else:
+                pt = Point.objects.create(
+                    geometry=geom,
+                    userid=request.user.id,
+                )
+                # Reload point to get pntid
+                pt = Point.objects.get(pk=pt.pk)
             validated_data['point_id'] = pt.pntid
             
 

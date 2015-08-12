@@ -10,7 +10,8 @@
                 {{>home}}  
                 <h1>{{label}}</h1>
                 {{#outbox_id}}
-                <a href="{{rt}}/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
+                <button class="delete ui-btn-right" data-outbox-id="{{outbox_id}}" data-icon="delete">Delete</button>
+                <a class="ui-btn-right" href="{{rt}}/outbox/{{outbox_id}}/edit" data-icon="edit">Edit</a>
                 {{/outbox_id}}
             </div>
             <div data-role="content">
@@ -25,7 +26,7 @@
                 <p><b>Comments</b>: <i>{{comments}}</i></p>
                 {{#attachments}}
                 <p>
-                    <img src="{{svc}}/viewimage/{{id}}" style="width:300px">
+                    <img src="{{svc}}/media/600/{{id}}.jpg" style="width:300px">
                 </p>
                 {{/attachments}}
                 {{^attachments}}

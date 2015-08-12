@@ -17,3 +17,16 @@
   clear: both;
   color: red;
 }
+
+.ui-btn-right.delete {
+  right: 6em;
+}
+
+.view_loc {
+  white-space: normal;
+}
+
+li.ui-field-contain.photo-li .ui-input-text {
+  width: 20em;
+  max-width: 80%;
+}

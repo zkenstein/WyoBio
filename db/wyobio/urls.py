@@ -6,10 +6,10 @@ admin.autodiscover()
 from wq.db import rest
 rest.autodiscover()
 
-from geodata.views import view_image
+from images.views import generate
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^viewimage/(?P<attachment_id>[0-9]+)', view_image),
+    url(r'^generate/(?P<size>\d+)/(?P<image>\d+)\.(?P<format>.+)$', generate),
     url(r'^', include(rest.router.urls))
 )

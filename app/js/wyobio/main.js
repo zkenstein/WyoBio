@@ -1,7 +1,8 @@
-define(['jquery', 'leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', 'wq/template', './forms', './config'],
+define(['jquery', 'leaflet',
+        'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', 'wq/template',
+        './forms', './config',
+        './outbox-delete', './add-photo'],
         function ($, L, router, locate, app, map, photos, tmpl, forms, config) {
-            L.Icon.Default.imagePath = "/css/lib/images";
-
             config.presync = function () {
                 $('button.sync').html("Syncing...");
             };
@@ -32,15 +33,15 @@ define(['jquery', 'leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/p
             }
 
 
-
+            app.use(map);
+            app.use(photos);
+            app.use(forms);
             app.init(config).then(function () {
                 if (!app.user) {
                     _showLogin();
                 }
-                map.init(config.map);
-                photos.init();
-                forms.setup();
                 router.addRoute('observations/new', 's', _locatorMap);
+                router.addRoute('observations/new', 'h', _stopLocate);
                 router.addRoute('', 'i', function () {
                     _showLogin(app.user);
                 });
@@ -60,7 +61,7 @@ define(['jquery', 'leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/p
                 });
             });
 
-
+            var _locator;
             function _locatorMap(match, ui, params, hash, evt, $page) {
                 // Create Leaflet map
                 var m = L.map('observation-new-map').fitBounds(config.map.bounds);
@@ -98,7 +99,13 @@ define(['jquery', 'leaflet', 'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/p
                     }
                 };
 
-                var locator = locate.locator(m, fields, opts);
+                _locator = locate.locator(m, fields, opts);
+            }
+            
+            function _stopLocate() {
+                if (_locator) {
+                    _locator.gpsStop();
+                }
             }
 
             function _speciesLookup(evt, data) {

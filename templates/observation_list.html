@@ -48,8 +48,8 @@
                     {{#list}}
                     <li ><a href="{{rt}}/observations/{{id}}">
 
-                            {{#attachments}}<img src="{{svc}}/viewimage/{{id}}" style="width:128px">{{/attachments}}
-                            {{^attachments}}<img src="{{rt}}/images/empty.png">{{/attachments}}
+                            {{#first_attachment}}<img src="{{svc}}/media/160/{{first_attachment}}.jpg">{{/first_attachment}}
+                            {{^first_attachment}}<img src="{{rt}}/images/empty.png">{{/first_attachment}}
 
                             <h3>{{label}}</h3>
                             <p>{{comments}}</p>
