@@ -12,3 +12,5 @@ rjs*
 app/images/icons/desktop.ini
 nbproject/project.xml
 nbproject/project.properties
+logs/errors.log
+*.ini
