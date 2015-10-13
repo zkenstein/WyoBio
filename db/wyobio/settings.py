@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # wq: SECRET_KEY, DEBUG and TEMPLATE_DEBUG are defined in local_settings.py
 
-ALLOWED_HOSTS = ["wyobio"]
+ALLOWED_HOSTS = ["m.wyobio.wygisc.org", "wyobio.wq.io"]
 
 
 # Application definition
@@ -40,11 +40,13 @@ INSTALLED_APPS = (
     'wq.db.patterns.identify',
     'wq.db.rest',
     'wq.db.rest.auth',
+	'owl',
 
     'geodata',
 )
 
 MIDDLEWARE_CLASSES = (
+    'owl.middleware.ServerEventMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -112,6 +114,31 @@ MEDIA_URL = '/media/'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+LOGGING = {
+    'version': 1,
+	'disable_existing_loggers': True,
+	'formatters': {
+	    'simple': {
+		    'format': '%(asctime)s\t%(levelname)s\t%(message)s',
+		}
+	},
+	'handlers': {
+		'general_log': {
+		    'level': 'ERROR',
+			'class': 'logging.FileHandler',
+			'formatter': 'simple',
+			'filename': os.path.join(BASE_DIR, 'logs', 'errors.log')
+		}
+	},
+	'loggers': {
+	    'django.request': {
+		    'handlers': ['general_log'],
+			'propagate': False,
+			'level': 'ERROR',
+		}
+	}
+}
 
 # wq: Import local settings
 try:

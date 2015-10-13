@@ -1,8 +1,8 @@
 define(['jquery', 'leaflet',
-        'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', 'wq/template',
+        'wq/router', 'wq/locate', 'wq/app', 'wq/map', 'wq/photos', 'wq/template', 'wq/owl',
         './forms', './config',
         './outbox-delete', './add-photo'],
-        function ($, L, router, locate, app, map, photos, tmpl, forms, config) {
+        function ($, L, router, locate, app, map, photos, tmpl, owl, forms, config) {
             config.presync = function () {
                 $('button.sync').html("Syncing...");
             };
@@ -21,6 +21,11 @@ define(['jquery', 'leaflet',
             });
             $('body').on('filterablebeforefilter', "#species_list", _speciesLookup);
             $('body').on('click', "#species_list li", _speciesSelect);
+			if (window.cordova) {
+				_initNative();
+			} else {
+			    _initWeb();
+			}
 
             function _showLogin(loggedIn) {
                 if (loggedIn) {
@@ -36,12 +41,16 @@ define(['jquery', 'leaflet',
             app.use(map);
             app.use(photos);
             app.use(forms);
+			app.use(owl);
             app.init(config).then(function () {
                 if (!app.user) {
                     _showLogin();
                 }
                 router.addRoute('observations/new', 's', _locatorMap);
                 router.addRoute('observations/new', 'h', _stopLocate);
+				router.addRoute('outbox/<slug>/edit', 's', function(match) {
+					app.runPlugins('observation', 'edit', match[1], match[0]);
+				});
                 router.addRoute('', 'i', function () {
                     _showLogin(app.user);
                 });
@@ -56,10 +65,48 @@ define(['jquery', 'leaflet',
                         });
                         var type_list = Object.keys(types);
                         type_list.sort();
-                        config.type_list = type_list;
+						if (type_list.length) {
+                            config.type_list = type_list;
+						}
                     });
                 });
             });
+			
+			function _initNative() {
+				var gaPlugin;
+				$('body').on('click', "a[target=_blank]", function(evt) {
+					window.open(this.href, '_blank', 'location=yes');
+					evt.preventDefault();
+					if (gaPlugin) {
+						gaPlugin.trackPage(noop, noop, this.href);
+					}
+					owl("link", {'url': this.href});
+				});
+				if (!window.plugins || !window.plugins.gaPlugin) {
+					return;
+				}
+				gaPlugin = window.plugins.gaPlugin;
+				gaPlugin.init(noop, noop, config.mobile_analytics_id, 30);
+				$('body').on('pageshow.screen', function() {
+					var page = $.mobile.activePage.jqmData('title');
+					gaPlugin.trackPage(noop, noop, page);
+				});
+				function noop() {};
+			}
+			
+			function _initWeb() {
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+				ga('create', config.web_analytics_id, 'auto');
+				ga('send', 'pageview')
+				$('body').on('pageshow.screen', function() {
+					var url = $.mobile.activePage.jqmData('url');
+					var page = $.mobile.activePage.jqmData('title');
+					ga('send', 'pageview', {'page': url, 'title': page});
+				});
+			}
 
             var _locator;
             function _locatorMap(match, ui, params, hash, evt, $page) {

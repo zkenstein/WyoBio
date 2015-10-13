@@ -3,8 +3,6 @@ function(config, version, templates, module) {
 
 var overrides = module.config();
 
-config.debug = true;
-
 config.type_list = [
     'Amphibian',
     'Arachnid',
@@ -47,8 +45,8 @@ config.template = {
 config.backgroundSync = -1;
 
 config.transitions = {
-    'default': "slide",
-    'save': "flip"
+    'default': "none",
+    'save': "none"
 };
 
 config.map = {
@@ -57,6 +55,10 @@ config.map = {
 
 for (var key in overrides) {
     config[key] = overrides[key];
+}
+
+if (config.store && config.store.service) {
+	config.owl = {'url': config.store.service + '/owl'};
 }
 
 return config;

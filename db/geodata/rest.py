@@ -1,5 +1,6 @@
 from wq.db import rest
 from .models import Point, Observation, Habitat, Weather, Phenology, Species
+from django.conf import settings
 from .serializers import (
     PointSerializer, ObservationSerializer, SpeciesSerializer,
 )
@@ -48,3 +49,8 @@ rest.router.register_model(
 rest.router.add_page('index', {'url': ''})
 rest.router.add_page('about', {'url': 'about'})
 rest.router._extra_pages['login'][0]['postsave'] = 'index'
+rest.router.set_extra_config(
+    debug=settings.DEBUG,
+	mobile_analytics_id=settings.MOBILE_ANALYTICS_ID,
+	web_analytics_id=settings.WEB_ANALYTICS_ID,
+)

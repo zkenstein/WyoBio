@@ -10,6 +10,7 @@ from images.views import generate
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^owl', include('owl.urls')),
     url(r'^generate/(?P<size>\d+)/(?P<image>\d+)\.(?P<format>.+)$', generate),
     url(r'^', include(rest.router.urls))
 )
