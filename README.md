@@ -1,14 +1,13 @@
-# WyoBio
-### A mobile app for field-based Citizen Science
+## WyoBio Mobile
+### Citizen Science = Science for Everyone!
 
-This is the source code for [**Species Tracker**](http://species.wq.io/), a concept for a mobile app for biodiversity monitoring.  During the [Hackfest](http://scistarter.com/blog/2015/02/reports-hackfest-citizen-science-association-conference/) at the inaugural [Citizen Science 2015 conference](http://citizenscienceassociation.org/conference/), we used the [wq framework](http://wq.io/) to create a simple prototype that allows anyone to upload photos and GPS coordinates together with species information.
+WyoBio: Contribute your animal, bird, plant, insect and fungi observations! The Wyoming Biodiversity Citizen Science Initiative (WyoBio) is a project intended to connect all citizens and visitors in Wyoming USA with information about biodiversity - contribute your species observations while you are on a hike, or from your backyard. Snap a photo, select a species from the list, and submit your information. This mobile app is part of a broader project and map application. Visit our [website](http://wyobio.org) for additional information.
 
-Below is a description of the steps we went through at the Hackfest:
+The source code for WyoBio Mobile is based on [Species Tracker](http://species.wq.io/), a concept for a mobile app for biodiversity monitoring created during the [Hackfest](http://scistarter.com/blog/2015/02/reports-hackfest-citizen-science-association-conference/) at the inaugural [Citizen Science 2015 conference](http://citizenscienceassociation.org/conference/).  WyoBio Mobile is powered by [wq, a modular open-source framework](http://wq.io/) for citizen science, crowdsourcing, and VGI.
 
-1. **Define project goals**.  What kind of observations do we want volunteers to submit?  What metadata do we need?  Are there any existing datasets we could use?  (Bring your ideas and design concepts!)
-2. **Implement rough prototype**.  We'll rely on the [project scaffolding tools](https://wq.io/docs/setup) provided by the [wq framework](https://wq.io/) to get an app up and running quickly.  (Experience with GitHub, HTML, Python and/or Ubuntu will be useful but not required.)
-3.  **Test and refine**.  Try submitting some photos from your device.  How can we improve the user experience? (Bring your mobile and tablet devices!)
-
-<a href="https://wq.io/wq.app"><img src="https://wq.io/images/512/wq.app.png" width=128 height=128></a>
-<a href="https://wq.io/wq.db"><img src="https://wq.io/images/512/wq.db.png" width=128 height=128></a>
-<a href="https://wq.io/wq.io"><img src="https://wq.io/images/512/wq.io.png" width=128 height=128></a>
+The primary changes we made to update Species Tracker to WyoBio Mobile include:
+ * Integration with WyoBio's [existing ArcGIS application](http://wyobio.org/application/) and Windows server
+ * Integration with WyoBio's existing authentication infrastructure
+ * Custom theme and icons
+ 
+![WyoBio Logo](https://raw.githubusercontent.com/WyGISC/WyoBio/master/app/images/icons/android-chrome-192x192.png)
