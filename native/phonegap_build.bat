@@ -25,3 +25,5 @@ XCOPY /S /I ..\htdocs-build\images build\images
 
 wq mustache --template index.html --output build/index.html
 wq mustache --template config.xml --output build/config.xml
+
+COPY splash.png build\splash.png

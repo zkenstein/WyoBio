@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Add Observation</title>
+        <title>{{#outbox_id}}Edit{{/outbox_id}}{{^outbox_id}}Add{{/outbox_id}} Observation</title>
         {{>head}}
 
 
@@ -12,7 +12,7 @@
         <div data-role="page" class="ui-page">
             <div data-role="header">
                 {{>home}}
-                <h1>Add Observation</h1>
+                <h1>{{#outbox_id}}Edit{{/outbox_id}}{{^outbox_id}}Add{{/outbox_id}} Observation</h1>
             </div>
             <div class="ui-content" role="main">
                 <form action="{{rt}}/observations/" data-ajax="false" method="post"

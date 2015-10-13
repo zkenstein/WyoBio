@@ -20,7 +20,7 @@
            'config': {
                'wyobio/config': {
                    'store': {
-                       'service': 'http://wyobio.wq.io',
+                       'service': 'http://m.wyobio.wygisc.org',
                        'defaults': {'format': 'json'}
                    },
                    'router': {
@@ -29,12 +29,13 @@
                }
            }
        });
-//        document.addEventListener('deviceready', function() {
+        document.addEventListener('deviceready', function() {
             require(['js/wyobio']);
-//        }, false);       
+        }, false);       
     </script>
   </head>
-  <body>
+  <body style="background-color: #252525;">
+  
     <div data-role="page" class="ui-page">
       <div data-role="header">
         <h1>WyoBio</h1>
@@ -72,7 +73,7 @@
             </a>
           </li>
         </ul>
-        <p>BETA Version {{version}}</p>
+        <p>Version {{version}}</p>
       </div>
     </div>
   </body>
